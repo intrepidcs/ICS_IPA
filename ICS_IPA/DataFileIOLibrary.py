@@ -100,6 +100,10 @@ def GetNumChannels(pJsonFile):
     return _DataFileIOLibrary.GetNumChannels(pJsonFile)
 GetNumChannels = _DataFileIOLibrary.GetNumChannels
 
+def ValidateSignals(pDbFile, pPrioritizedSignalJsonFile, pValidSignalJsonFile):
+    return _DataFileIOLibrary.ValidateSignals(pDbFile, pPrioritizedSignalJsonFile, pValidSignalJsonFile)
+ValidateSignals = _DataFileIOLibrary.ValidateSignals
+
 def OpenDataFile(pDataFile, pJsonFile):
     return _DataFileIOLibrary.OpenDataFile(pDataFile, pJsonFile)
 OpenDataFile = _DataFileIOLibrary.OpenDataFile
@@ -123,6 +127,10 @@ JumpAfterTimestamp = _DataFileIOLibrary.JumpAfterTimestamp
 def GetNextRecord(indatapointer):
     return _DataFileIOLibrary.GetNextRecord(indatapointer)
 GetNextRecord = _DataFileIOLibrary.GetNextRecord
+
+def SetCursorsToStart(indatapointer):
+    return _DataFileIOLibrary.SetCursorsToStart(indatapointer)
+SetCursorsToStart = _DataFileIOLibrary.SetCursorsToStart
 
 def CloseDataFile(indatapointer):
     return _DataFileIOLibrary.CloseDataFile(indatapointer)
@@ -153,38 +161,13 @@ class CreateDSR:
 	def __init__(self):
 		self.dsr =  {"HitLists" : []}
 
-	def Begin(self, data, hitDiscretion = "Hit number ", initTrigger=False):
-		self.numRec = 0
-		self.triggered = initTrigger
-		self.hitDiscretion = hitDiscretion
-		curTimestamp = data.JumpAfterTimestamp(0)
-		self.data = data
-		self.dsr["HitLists"].append({"FilenameAndPath": data.dbFileName})
-
-	def IncludeRecord(self, included):
-		if included:
-			if not self.triggered:
-				if "Hits" not in self.dsr["HitLists"][-1]:
-					self.dsr["HitLists"][-1]["Hits"] = []
-				self.dsr["HitLists"][-1]["Hits"].append({"Description" : self.hitDiscretion + str(self.numRec), "StartTimes": self.data.RecordTimestamp })
-				self.numRec += 1
-				self.triggered = True
-		elif self.triggered:
-			self.dsr["HitLists"][-1]["Hits"][-1]["EndTime"] = self.data.RecordTimestamp
-			self.triggered = False
-
-	def End(self):
-		if self.triggered:
-			self.dsr["HitLists"][-1]["Hits"][-1]["EndTime"] = data.GetMeasurementTimeBounds()[2] - data.GetMeasurementTimeBounds()[1]	
-
-
-	def Add(self, data, callback, hitDiscretion = "Hit number ", initTrigger=False):
+	def AddToDSR(self, data, callback, hitDiscretion = "Hit number "):
 		'''
 		the AddToDSR function takes two arguments the first being ICSData class and the second being a function with two paramaters as an argument
 		The AddToDSR calls the function for every data point it iterates though to determan if it should be included in the DSR file
 		'''
 		numRec = 0
-		triggered = initTrigger
+		triggered = False
 		dsr = self.dsr
 		curTimestamp = data.JumpAfterTimestamp(0)
 		dsr["HitLists"].append({"FilenameAndPath": data.dbFileName})
@@ -193,15 +176,13 @@ class CreateDSR:
 				if not triggered:
 					if "Hits" not in dsr["HitLists"][-1]:
 						dsr["HitLists"][-1]["Hits"] = []
-					dsr["HitLists"][-1]["Hits"].append({"Description" : hitDiscretion + str(numRec), "StartTimes": curTimestamp })
+					dsr["HitLists"][-1]["Hits"].append({"Description" : hitDiscretion + str(numRec), "StartTimes": curTimestamp - data.GetMeasurementTimeBounds()[1]})
 					numRec += 1
 					triggered = True
 			elif triggered:
-				dsr["HitLists"][-1]["Hits"][-1]["EndTime"] = curTimestamp
+				dsr["HitLists"][-1]["Hits"][-1]["EndTime"] = curTimestamp - data.GetMeasurementTimeBounds()[1]
 				triggered = False
 			curTimestamp = data.GetNextRecord()
-		if triggered:
-			dsr["HitLists"][-1]["Hits"][-1]["EndTime"] = data.GetMeasurementTimeBounds()[2] - data.GetMeasurementTimeBounds()[1]
 
 	def save(self, filename = "data.dsr"):
 		with open(filename, 'w') as outfile:
@@ -330,8 +311,7 @@ class ICSDataFile:
 		 *  @param n             The number of channels (size of the datapointer array)
 		 *  @return The actual timestamp the cursor is on
 		"""
-		self.RecordTimestamp = GetNextRecord(self.points)
-		return self.RecordTimestamp
+		return GetNextRecord(self.points)
 
 
 	def GetMeasurementTimeBounds(self):
