@@ -1,6 +1,6 @@
-from distutils.core import setup
+from setuptools import setup
 
-version = '0.0.1.4'
+version = '0.0.1.6'
 
 setup(
 	name = 'ICS_IPA',
