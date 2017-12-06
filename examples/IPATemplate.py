@@ -6,13 +6,14 @@ import sys
 import os
 
 from ICS_IPA import DataFileIOLibrary as icsFI
+from ICS_IPA import DSRTools as icsDSR
 from ICS_IPA import IPAInterfaceLibrary
 
 jsonFileName = IPAInterfaceLibrary.get_config_file()
 filenames = IPAInterfaceLibrary.get_input_file_list()
 
 #------------------------------------------------------------------------------------------------------------------
-dsr = icsFI.CreateDSR()
+dsr = icsDSR.DSRFile()
 #there are multiple methods to save to a dsr file.
 for filename in filenames:
 	with icsFI.ICSDataFile(filename, jsonFileName) as data:
@@ -24,14 +25,14 @@ for filename in filenames:
 		dataPoints = data.GetPoints()
 		dsr.Begin(data)
 		while curTimestamp != sys.float_info.max:
-			dsr.IncludeRecord(dataPoints[accelpedalPostionIndex] > 80 and dataPoints[transOutputSpeedIndex] < 1600)
+			dsr.IncludeCurrentRecord(dataPoints[accelpedalPostionIndex] > 80 and dataPoints[transOutputSpeedIndex] < 1600)
 			curTimestamp = data.GetNextRecord()
 		dsr.End()
  
 #------------------------------------------------------------------------------------------------------------------
 
 
-#dsr = icsFI.CreateDSR()
+#dsr = icsDSR.CreateDSR()
 for filename in filenames:
 	with icsFI.ICSDataFile(filename, jsonFileName) as data:
 

@@ -13,7 +13,7 @@ setup(
 	url = 'https://github.com/intrepidcs/ICS_IPA',
 	download_url = 'https://github.com/intrepidcs/ICS_IPA/archive/'+ version + '.tar.gz',
 	package=['DataFileIOLibrary'],
-	package_data = {'DataFileIOLibrary': ['ICS_IPA/_DataFileIOLibrary.pyd']},
+	package_data = {'DataFileIOLibrary': ['ICS_IPA/_DataFileIOLibraryInterface.pyd']},
 	include_package_data=True,
 	classifiers = ['Operating System :: Microsoft :: Windows',
 				'Programming Language :: Python',

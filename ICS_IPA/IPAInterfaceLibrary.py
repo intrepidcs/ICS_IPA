@@ -30,7 +30,7 @@ def get_input_file_list(autoConvertToDB = False):
                 if not os.path.isfile(name + ".db"):
                     DataFileIOLibrary.CreateDatabase(file_name, name + ".db")
                 filenames[idx] = name + ".db"
-    return filenames
+    return [dict(("path", item ) for item in filenames)]
 
 def get_config_file():
     root = tk.Tk()
@@ -60,3 +60,6 @@ def update_progress(percent, message):
     if len(message):
         sys.stderr.write(message + "\n")
     sys.stderr.write("Percent done: {}\n".format(percent))
+
+def is_running_on_wivi_Server():
+    return False
