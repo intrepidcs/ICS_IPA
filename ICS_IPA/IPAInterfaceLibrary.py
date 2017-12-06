@@ -61,5 +61,5 @@ def update_progress(percent, message):
         sys.stderr.write(message + "\n")
     sys.stderr.write("Percent done: {}\n".format(percent))
 
-def is_running_on_wivi_Server():
+def is_running_on_wivi_server():
     return False

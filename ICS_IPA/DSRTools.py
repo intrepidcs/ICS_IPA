@@ -11,7 +11,7 @@ class DSRFile:
 		self.triggered = initTrigger
 		self.hitDiscretion = hitDiscretion
 		self.data = data
-		if IPAInterfaceLibrary.is_running_on_wivi_Server():
+		if IPAInterfaceLibrary.is_running_on_wivi_server():
 			self.dsr["HitLists"].append({"id": data.dbFile["id"], "startDate": data.dbFile["startDate"], "vehicle": data.dbFile["vehicle"]})	
 		else:
 			self.dsr["HitLists"].append({"FilenameAndPath": data.dbFile["path"]})
