@@ -100,6 +100,10 @@ def GetNumChannels(pJsonFile):
     return _DataFileIOLibraryInterface.GetNumChannels(pJsonFile)
 GetNumChannels = _DataFileIOLibraryInterface.GetNumChannels
 
+def ValidateSignals(pDbFile, pPrioritizedSignalJsonFile, pValidSignalJsonFile):
+    return _DataFileIOLibraryInterface.ValidateSignals(pDbFile, pPrioritizedSignalJsonFile, pValidSignalJsonFile)
+ValidateSignals = _DataFileIOLibraryInterface.ValidateSignals
+
 def OpenDataFile(pDataFile, pJsonFile):
     return _DataFileIOLibraryInterface.OpenDataFile(pDataFile, pJsonFile)
 OpenDataFile = _DataFileIOLibraryInterface.OpenDataFile
@@ -123,6 +127,10 @@ JumpAfterTimestamp = _DataFileIOLibraryInterface.JumpAfterTimestamp
 def GetNextRecord(indatapointer):
     return _DataFileIOLibraryInterface.GetNextRecord(indatapointer)
 GetNextRecord = _DataFileIOLibraryInterface.GetNextRecord
+
+def SetCursorsToStart(indatapointer):
+    return _DataFileIOLibraryInterface.SetCursorsToStart(indatapointer)
+SetCursorsToStart = _DataFileIOLibraryInterface.SetCursorsToStart
 
 def CloseDataFile(indatapointer):
     return _DataFileIOLibraryInterface.CloseDataFile(indatapointer)

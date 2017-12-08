@@ -3,34 +3,49 @@ import os
 import numpy as np
 import pprint
 import json
+import logging
 from ICS_IPA.DataFileIOLibraryInterface import *
 
 class ICSDataFile:
-	def __init__(self, dbFile, jsonFileName, AutoCleanUpTempFiles = True):
-		self.UsingTempFile = False
-		if "path" not in dbFile:
-			raise ValueError('invalid dbFile')
-		dbFileName = dbFile["path"]
-		if len(dbFileName) > 0:
-			name, extension = os.path.splitext(dbFileName)
-			if extension.lower() != ".db":
-				if not os.path.isfile(name + ".db"):
-					CreateDatabaseForSignals(dbFileName, jsonFileName, name + ".db")
-					self.UsingTempFile = True
-				dbFileName = name + ".db"
+	def __init__(self, dbFile, slFilePath, AutoCleanUpTempFiles = True):
+		'''
+		@param dbFile this can ether be a MDF or a db file generated from an MDF
+		@param slFilePath this can ether be a sl file or an asl file
+		@param AutoCleanUpTempFiles determins whether the generated files will be deleted 
+		'''	
+		logging.info("initializing ICSDataFile")
+		if isinstance(dbFile, str):
+			dbFile = {"path": dbFile}
+		elif "path" in dbFile:
+			pass
+		else:
+			raise ValueError('invalid db/mdf File Path')
 
+		self.UsingTempDBFile = False
+		self.UsingTempSLFile = False
+		
+		if os.path.splitext(slFilePath)[1] == '.asl':
+			slFilePath = self.__ResolveAliaces(dbFile["path"], slFilePath)
+
+		dbFileName = self.__GetDBFilePath(dbFile["path"], slFilePath)
+		self.__OpenDataFile(dbFileName, slFilePath)
+		self.__SetupIndexOperator(slFilePath)
+
+		self.RecordTimestamp = -1
 		self.dbFile = dbFile
 		self.dbFileName = dbFileName
-		self.jsonFileName = jsonFileName
+		self.slFilePath = slFilePath
 		self.AutoCleanUpTempFiles = AutoCleanUpTempFiles
-		self.measStart, self.points, self.timestamps = OpenDataFile(self.dbFileName, self.jsonFileName)
-		self.RecordTimestamp = -1
 
-		with open(jsonFileName) as data_file:  
-			data = json.load(data_file)
-			self.nameToIndex = { channel["name"]: index for index, channel in enumerate(data["Channels"])}
-			self.indexToName = { index: channel["name"] for index, channel in enumerate(data["Channels"])}
-		
+	def __del__(self):
+		CloseDataFile(self.points)
+		if self.UsingTempDBFile and self.AutoCleanUpTempFiles and os.path.isfile(self.dbFileName):
+			os.remove(self.dbFileName)
+			self.dbFileName = ''
+		if self.UsingTempSLFile and self.AutoCleanUpTempFiles and os.path.isfile(self.slFilePath):
+			os.remove(self.slFilePath)
+			self.slFilePath = ''
+
 	def __getitem__(self, key):
 		''' this method of retrieving data is slower then simply asking for the timestamp and points array'''
 		if type(key) == str and key in self.nameToIndex:
@@ -40,25 +55,84 @@ class ICSDataFile:
 			return {"name": self.indexToName[key], "index": key, "point": self.points[key], "time": self.timestamps[key]}
 		else:
 			{}
-
+		
 	def __enter__(self):
 		return self
 
 	def __exit__(self, exc_type, exc_value, traceback):
 		CloseDataFile(self.points)
-		if self.UsingTempFile and self.AutoCleanUpTempFiles:
+		if self.UsingTempDBFile and self.AutoCleanUpTempFiles and os.path.isfile(self.dbFileName):
 			os.remove(self.dbFileName)
+			self.dbFileName = ''
+		if self.UsingTempSLFile and self.AutoCleanUpTempFiles and os.path.isfile(self.slFilePath):
+			os.remove(self.slFilePath)
+			self.slFilePath = ''
+	
+	def __GetDBFilePath(self, dbFileName, slFilePath):
+		if len(dbFileName) > 0:
+			name, extension = os.path.splitext(dbFileName)
+			if extension.lower() != ".db":
+				if not os.path.isfile(name + ".db"):
+					val = CreateDatabaseForSignals(dbFileName, slFilePath, name + ".db")
+					if val == 0:
+						logging.warning("Create Database for Signals error")
+					elif val == -1:
+						raise ValueError('The Data Spy license is invalid')
+					self.UsingTempDBFile = True
+				dbFileName = name + ".db"
+		return dbFileName
 
+	def __OpenDataFile(self, dbFileName, slFilePath):
+		self.measStart, self.points, self.timestamps = OpenDataFile(dbFileName, slFilePath)
+		if self.measStart == 0:
+			logging.warning("The number of data channels found does not match the number of channels in the JSON file")
+		elif self.measStart == -1:
+			raise ValueError('The Data Spy license is invalid')
+		elif self.measStart == -2:
+			raise ValueError('The Data file is invalid')
+		elif self.measStart == -3:
+			raise ValueError('The JSON file is invalid')
+
+	def __SetupIndexOperator(self, slFilePath):
+		with open(slFilePath) as data_file:
+			data = json.load(data_file)
+			self.nameToIndex = { channel["name"]: index for index, channel in enumerate(data["Channels"])}
+			self.indexToName = { index: channel["name"] for index, channel in enumerate(data["Channels"])}
+
+	def __ResolveAliaces(self, dbFile, aslFilePath):
+		'''
+		@param dbFile is the database file that you would like to open
+		@parama slFilePath is the presumed JSON file with aliases
+
+		@returns JSON file with resolved aliaces if file is valid,
+				if file is invalid or does not contain aliases returns 
+				aslFilePath 
+		'''
+		path, filename = os.path.split(aslFilePath)
+		filename, extension = os.path.splitext(filename)
+		newfilename = '%s%s' % (filename,  ".sl")
+		newpath = os.path.join(path, newfilename)
+		self.numChannels = ValidateSignals(dbFile, aslFilePath, newpath)
+
+		if self.numChannels <= 0:
+			newpath = aslFilePath
+		else:
+			self.UsingTempSLFile = True
+		if self.numChannels == 0:
+			logging.warning("The number of data channels found does not match the number of channels in the JSON file")
+		elif self.numChannels == -1:
+			raise ValueError('The Data Spy license is invalid')
+		elif self.numChannels == -2:
+			raise ValueError('The Data file is invalid')
+		elif self.numChannels == -3:
+			raise ValueError('The JSON file is invalid')
+		return newpath
+	
 	def indexOfSignal(self, sigName):
 		return self.nameToIndex[sigName] if sigName in self.nameToIndex else -1
 
-	def __del__(self):
-		CloseDataFile(self.points)
-		if self.UsingTempFile and self.AutoCleanUpTempFiles:
-			os.remove(self.dbFileName)
-
 	def GetNumChannels(self):
-		return GetNumChannels(self.jsonFileName)
+		return GetNumChannels(self.slFilePath)
 
 	def GetMeasurementStart(self):
 		return self.measStart
@@ -67,7 +141,14 @@ class ICSDataFile:
 		return self.points
 
 	def GetTimeStamps(self):
+		"""
+		Returns an numpy array containg the timestamp for each signal at 
+		"""
 		return self.timestamps
+
+	def SetCursorsToStart(self):
+		self.RecordTimestamp = SetCursorsToStart(self.points)
+		return RecordTimestamp
 
 	def SetActiveMask(self, mask):
 		""" Allows the user to position the time cursor just before or at the specified
@@ -162,8 +243,10 @@ def test():
 	from tkinter import filedialog
 	root = tk.Tk()
 	root.withdraw()
+	root.focus_force()
+	root.wm_attributes('-topmost', 1)
 	dbFileName = filedialog.askopenfilename(parent=root, filetypes = (("db files", "*.db"), ("All files", "*.*")))
-	jsonFileName = filedialog.askopenfilename(parent=root, filetypes = (("json files", "*.json"), ("All files", "*.*")))
+	jsonFileName = filedialog.askopenfilename(parent=root, filetypes = (("Lookup files", "*.sl;*.asl"), ("Signal Lookup files", "*.sl"),  ("Aliased Signal Lookup files", "*.asl"), ("All files", "*.*")))
 	data = ICSDataFile(dbFileName, jsonFileName)
 	curTimestamp = data.JumpAfterTimestamp(0)
 	minarray = np.copy(data.GetPoints())
@@ -178,31 +261,8 @@ def test():
 	print(maxarray)
 	print("End of Test")
 
-def test2():
-	from  SigEnumFile import Sig 
-	def cheekfullThrotel (values, timestamp):
-		return values[Sig.AccelPedalPosition] > 80 and values[Sig.TransOutputSpeed] < 1600
-
-	sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
-	from Libraries import IPAInterfaceLibrary
-
-	jsonFileName = IPAInterfaceLibrary.get_config_file()
-	filenames = IPAInterfaceLibrary.get_input_file_list()
-	dsr = CreateDSR()
-
-	for filename in filenames:
-		data = ICSDataFile(filename, jsonFileName)
-
-		accelpedalPostionIndex = data.indexOfSignal("AccelPedalPosition")
-		transOutputSpeedndex = data.indexOfSignal("TransOutputSpeed") 
-
-		dsr.AppendToDSR(data, lambda p, t: p[accelpedalPostionIndex] > 80 and p[transOutputSpeedndex] < 1600)
-		dsr.AppendToDSR(data, cheekfullThrotel, "Full Throtel hit")
-
-	dsr.save()
-
 if __name__ == "__main__":
-	test2()
+	test()
 
 # This file is compatible with both classic and new-style classes.
 

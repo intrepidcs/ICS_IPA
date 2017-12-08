@@ -37,7 +37,7 @@ def get_config_file():
     root.withdraw()
     root.focus_force()
     root.wm_attributes('-topmost', 1)
-    fileName = filedialog.askopenfilename(filetypes = (("JSON files", "*.json"), ("All files", "*.*")))
+    fileName = filedialog.askopenfilename(filetypes = (("Lookup files", "*.sl;*.asl"), ("Signal Lookup files", "*.sl"),  ("Aliased Signal Lookup files", "*.asl"), ("All files", "*.*")))
     return fileName
 
 def get_config_data():

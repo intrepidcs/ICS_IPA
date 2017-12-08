@@ -9,14 +9,16 @@ from ICS_IPA import DataFileIOLibrary as icsFI
 from ICS_IPA import DSRTools as icsDSR
 from ICS_IPA import IPAInterfaceLibrary
 
-jsonFileName = IPAInterfaceLibrary.get_config_file()
-filenames = IPAInterfaceLibrary.get_input_file_list()
+slFilePath = IPAInterfaceLibrary.get_config_file()
+dbFilePaths = IPAInterfaceLibrary.get_input_file_list()
+
 
 #------------------------------------------------------------------------------------------------------------------
 dsr = icsDSR.DSRFile()
 #there are multiple methods to save to a dsr file.
-for filename in filenames:
-	with icsFI.ICSDataFile(filename, jsonFileName) as data:
+
+for dbFilePath in dbFilePaths:
+	with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
 
 		accelpedalPostionIndex = data.indexOfSignal("AccelPedalPosition")
 		transOutputSpeedIndex = data.indexOfSignal("TransOutputSpeed")
@@ -33,8 +35,8 @@ for filename in filenames:
 
 
 #dsr = icsDSR.CreateDSR()
-for filename in filenames:
-	with icsFI.ICSDataFile(filename, jsonFileName) as data:
+for dbFilePath in dbFilePaths:
+	with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
 
 		accelpedalPostionIndex = data.indexOfSignal("AccelPedalPosition")
 		transOutputSpeedIndex = data.indexOfSignal("TransOutputSpeed")
@@ -54,8 +56,8 @@ def checkFullThrotel (values, timestamp):
 	return values[Sig.AccelPedalPosition] > 80 and values[Sig.TransOutputSpeed] < 1600
 
 
-for filename in filenames:
-	with icsFI.ICSDataFile(filename, jsonFileName) as data:
+for dbFilePath in dbFilePaths:
+	with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
 		
 		dsr.Add(data, checkFullThrotel, "Full Throtel hit")
 
@@ -70,8 +72,8 @@ class dataCheck:
 		return values[Sig.AccelPedalPosition] > self.AccelPedalPositionMax and values[Sig.TransOutputSpeed] < self.TransOutputSpeedMin
 
 dc = dataCheck()
-for filename in filenames:
-	with icsFI.ICSDataFile(filename, jsonFileName) as data:
+for dbFilePath in dbFilePaths:
+	with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
 		
 		dsr.Add(data, dc, hitDiscretion = "Class Example hit")
 
@@ -90,8 +92,8 @@ class AdvancedDataCheck:
 		return values[Sig.AccelPedalPosition] > self.AccelPedalPositionMax and values[Sig.TransOutputSpeed] < self.TransOutputSpeedMin
 
 dc = dataCheck()
-for filename in filenames:
-	with icsFI.ICSDataFile(filename, jsonFileName) as data:
+for dbFilePath in dbFilePaths:
+	with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
 		
 		dsr.Add(data, dc, hitDiscretion = "Class Example hit")
 
