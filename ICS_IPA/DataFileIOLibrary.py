@@ -167,19 +167,19 @@ class ICSDataFile:
 
 	def JumpAfterTimestamp(self, timestamp):
 		""" Allows the user to position the time cursor just after or at the specified
-		 *  time value.  This call updates the channel values and timestamps.  The first
-		 *  timestamp where all channels have a value and which is at or after the requested
-		 *  time.  If only some channels are active, the nearest active channel's timestamp is
-		 *  used.
-		 *  
-		 *  If an error ocurred, the return value is DBL_MAX
-		 *
-		 *  Timestamps represent the number of seconds since January 1, 2007.  The decimals 
-		 *  represent fractions of seconds.
-		 *
-		 *  @param dTime         The timestamp to jump to
-		 *  @return The actual timestamp the cursor is on
-		 """
+		*  time value.  This call updates the channel values and timestamps.  The first
+		*  timestamp where all channels have a value and which is at or after the requested
+		*  time.  If only some channels are active, the nearest active channel's timestamp is
+		*  used.
+		*  
+		*  If an error ocurred, the return value is DBL_MAX
+		*
+		*  Timestamps represent the number of seconds since start of measurement.  The decimals 
+		*  represent fractions of seconds.
+		*
+		*  @param dTime         The timestamp to jump to
+		*  @return The actual timestamp the cursor is on
+		"""
 		self.RecordTimestamp = JumpAfterTimestamp(self.points, timestamp) 
 		return self.RecordTimestamp
 
@@ -210,14 +210,25 @@ class ICSDataFile:
 		 *  
 		 *  If an error ocurred, the return value is DBL_MAX
 		 *
-		 *  Timestamps represent the number of seconds since January 1, 2007.  The decimals 
-		 *  represent fractions of seconds.
-		 *
 		 *  @param indatapointer The datapointer value received from the OpenDataFile call
 		 *  @param n             The number of channels (size of the datapointer array)
 		 *  @return The actual timestamp the cursor is on
 		"""
 		self.RecordTimestamp = GetNextRecord(self.points)
+		return self.RecordTimestamp
+
+	def GetNextChangedRecord(self):
+		""" Advances the cursor to the next record with changed signal values.
+		*  This call updates the channel values and timestamps.  If only some channels are 
+		*  active, the next timestamp of an active channel is the one returned.
+		*  
+		*  If an error ocurred, the return value is DBL_MAX
+		*
+		*  @param indatapointer The datapointer value received from the OpenDataFile call
+		*  @param n             The number of channels (size of the datapointer array)
+		*  @return The actual timestamp the cursor is on
+		"""
+		self.RecordTimestamp = GetNextChangedRecord(self.points)
 		return self.RecordTimestamp
 
 
