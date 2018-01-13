@@ -4,7 +4,26 @@ import numpy as np
 import pprint
 import json
 import logging
+
 from ICS_IPA.DataFileIOLibraryInterface import *
+
+logger = logging.getLogger(__name__)
+
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+# create a file handler
+handler = logging.FileHandler('IPA.log')
+handler.setLevel(logging.INFO)
+
+# create a logging format
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+
+# add the handlers to the logger
+logger.addHandler(handler)
+
 
 class ICSDataFile:
 	def __init__(self, dbFile, slFilePath, AutoCleanUpTempFiles = True):
@@ -13,32 +32,39 @@ class ICSDataFile:
 		@param slFilePath this can ether be a sl file or an asl file
 		@param AutoCleanUpTempFiles determins whether the generated files will be deleted 
 		'''	
-		logging.info("initializing ICSDataFile")
-		if isinstance(dbFile, str):
-			dbFile = {"path": dbFile}
-		elif "path" in dbFile:
-			pass
-		else:
-			raise ValueError('invalid db/mdf File Path')
+		try :
+			logger.info("initializing ICSDataFile")
+			if isinstance(dbFile, str):
+				dbFile = {"path": dbFile}
+			elif "path" in dbFile:
+				pass
+			else:
+				raise ValueError('invalid db/mdf File Path')
 
-		self.UsingTempDBFile = False
-		self.UsingTempSLFile = False
-		
-		if os.path.splitext(slFilePath)[1] == '.asl':
-			slFilePath = self.__ResolveAliaces(dbFile["path"], slFilePath)
+			self.UsingTempDBFile = False
+			self.UsingTempSLFile = False
+			
+			if os.path.splitext(slFilePath)[1] == '.asl':
+				slFilePath = self.__ResolveAliaces(dbFile["path"], slFilePath)
 
-		dbFileName = self.__GetDBFilePath(dbFile["path"], slFilePath)
-		self.__OpenDataFile(dbFileName, slFilePath)
-		self.__SetupIndexOperator(slFilePath)
+			dbFileName = self.__GetDBFilePath(dbFile["path"], slFilePath)
+			self.__OpenDataFile(dbFileName, slFilePath)
+			self.__SetupIndexOperator(slFilePath)
 
-		self.RecordTimestamp = -1
-		self.dbFile = dbFile
-		self.dbFileName = dbFileName
-		self.slFilePath = slFilePath
-		self.AutoCleanUpTempFiles = AutoCleanUpTempFiles
+			self.RecordTimestamp = -1
+			self.dbFile = dbFile
+			self.dbFileName = dbFileName
+			self.slFilePath = slFilePath
+			self.AutoCleanUpTempFiles = AutoCleanUpTempFiles
+		except ValueError as e:
+			logger.error(str(e))
+			raise
 
 	def __del__(self):
-		CloseDataFile(self.points)
+		try:
+			CloseDataFile(self.points)
+		except:
+			pass
 		if self.UsingTempDBFile and self.AutoCleanUpTempFiles and os.path.isfile(self.dbFileName):
 			os.remove(self.dbFileName)
 			self.dbFileName = ''
@@ -60,7 +86,10 @@ class ICSDataFile:
 		return self
 
 	def __exit__(self, exc_type, exc_value, traceback):
-		CloseDataFile(self.points)
+		try:
+			CloseDataFile(self.points)
+		except:
+			pass
 		if self.UsingTempDBFile and self.AutoCleanUpTempFiles and os.path.isfile(self.dbFileName):
 			os.remove(self.dbFileName)
 			self.dbFileName = ''
@@ -69,13 +98,17 @@ class ICSDataFile:
 			self.slFilePath = ''
 	
 	def __GetDBFilePath(self, dbFileName, slFilePath):
+		''' 
+		Called by the constructor to create/verify db file. 
+		The db file is created if the filename given is not a db file 
+		'''
 		if len(dbFileName) > 0:
 			name, extension = os.path.splitext(dbFileName)
 			if extension.lower() != ".db":
 				if not os.path.isfile(name + ".db"):
 					val = CreateDatabaseForSignals(dbFileName, slFilePath, name + ".db")
 					if val == 0:
-						logging.warning("Create Database for Signals error")
+						logger.warning("Create Database for Signals error")
 					elif val == -1:
 						raise ValueError('The Data Spy license is invalid')
 					self.UsingTempDBFile = True
@@ -85,7 +118,7 @@ class ICSDataFile:
 	def __OpenDataFile(self, dbFileName, slFilePath):
 		self.measStart, self.points, self.timestamps = OpenDataFile(dbFileName, slFilePath)
 		if self.measStart == 0:
-			logging.warning("The number of data channels found does not match the number of channels in the JSON file")
+			logger.warning("The number of data channels found does not match the number of channels in the JSON file")
 		elif self.measStart == -1:
 			raise ValueError('The Data Spy license is invalid')
 		elif self.measStart == -2:
@@ -119,7 +152,7 @@ class ICSDataFile:
 		else:
 			self.UsingTempSLFile = True
 		if self.numChannels == 0:
-			logging.warning("The number of data channels found does not match the number of channels in the JSON file")
+			logger.warning("The number of data channels found does not match the number of channels in the JSON file")
 		elif self.numChannels == -1:
 			raise ValueError('The Data Spy license is invalid')
 		elif self.numChannels == -2:

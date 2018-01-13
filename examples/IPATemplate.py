@@ -13,40 +13,47 @@ slFilePath = IPAInterfaceLibrary.get_config_file()
 dbFilePaths = IPAInterfaceLibrary.get_input_file_list()
 
 
+
 #------------------------------------------------------------------------------------------------------------------
 dsr = icsDSR.DSRFile()
 #there are multiple methods to save to a dsr file.
 
 for dbFilePath in dbFilePaths:
-	with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
+	try :
+		with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
 
-		accelpedalPostionIndex = data.indexOfSignal("AccelPedalPosition")
-		transOutputSpeedIndex = data.indexOfSignal("TransOutputSpeed")
-		
-		curTimestamp = data.JumpAfterTimestamp(0)
-		dataPoints = data.GetPoints()
-		dsr.Begin(data)
-		while curTimestamp != sys.float_info.max:
-			dsr.IncludeCurrentRecord(dataPoints[accelpedalPostionIndex] > 80 and dataPoints[transOutputSpeedIndex] < 1600)
-			curTimestamp = data.GetNextRecord()
-		dsr.End()
+			accelpedalPostionIndex = data.indexOfSignal("AccelPedalPosition")
+			transOutputSpeedIndex = data.indexOfSignal("TransOutputSpeed")
+			
+			curTimestamp = data.JumpAfterTimestamp(0)
+			dataPoints = data.GetPoints()
+			dsr.Begin(data)
+			while curTimestamp != sys.float_info.max:
+				dsr.IncludeCurrentRecord(dataPoints[accelpedalPostionIndex] > 80 and dataPoints[transOutputSpeedIndex] < 1600)
+				curTimestamp = data.GetNextRecord()
+			dsr.End()
+	except ValueError as e :
+		print(str(e))
  
 #------------------------------------------------------------------------------------------------------------------
 
 
 #dsr = icsDSR.CreateDSR()
 for dbFilePath in dbFilePaths:
-	with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
+	try :
+		with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
 
-		accelpedalPostionIndex = data.indexOfSignal("AccelPedalPosition")
-		transOutputSpeedIndex = data.indexOfSignal("TransOutputSpeed")
-		#the first is using lambdas, you can think of lambdas as functions without a name 
-		#the following lambda has two parameters v and t. v for values and t for time
-		#the AddToDSR function takes a function with two paramaters as an argument
-		#The AddToDSR calls the function for every data point it iterates though to determan if it should be included in the DSR file
-		#The following two calls do the same thing in two diffrent ways the first uses a lambda
+			accelpedalPostionIndex = data.indexOfSignal("AccelPedalPosition")
+			transOutputSpeedIndex = data.indexOfSignal("TransOutputSpeed")
+			#the first is using lambdas, you can think of lambdas as functions without a name 
+			#the following lambda has two parameters v and t. v for values and t for time
+			#the AddToDSR function takes a function with two paramaters as an argument
+			#The AddToDSR calls the function for every data point it iterates though to determan if it should be included in the DSR file
+			#The following two calls do the same thing in two diffrent ways the first uses a lambda
 
-		dsr.Add(data, lambda v, t: v[accelpedalPostionIndex] > 80 and v[transOutputSpeedIndex] < 1600)
+			dsr.Add(data, lambda v, t: v[accelpedalPostionIndex] > 80 and v[transOutputSpeedIndex] < 1600)
+	except ValueError as e :
+		print(str(e))
 
 #------------------------------------------------------------------------------------------------------------------
 #The second simply passes a function
@@ -57,10 +64,12 @@ def checkFullThrotel (values, timestamp):
 
 
 for dbFilePath in dbFilePaths:
-	with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
-		
-		dsr.Add(data, checkFullThrotel, "Full Throtel hit")
+	try :
+		with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:	
+			dsr.Add(data, checkFullThrotel, "Full Throtel hit")
 
+	except ValueError as e :
+		print(str(e))
 #------------------------------------------------------------------------------------------------------------------
 #The Third method uses a class
 class dataCheck:
@@ -73,9 +82,11 @@ class dataCheck:
 
 dc = dataCheck()
 for dbFilePath in dbFilePaths:
-	with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
-		
-		dsr.Add(data, dc, hitDiscretion = "Class Example hit")
+	try :
+		with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:		
+			dsr.Add(data, dc, hitDiscretion = "Class Example hit")
+	except ValueError as e :
+		print(str(e))
 
 #------------------------------------------------------------------------------------------------------------------
 
@@ -93,9 +104,11 @@ class AdvancedDataCheck:
 
 dc = dataCheck()
 for dbFilePath in dbFilePaths:
-	with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
-		
-		dsr.Add(data, dc, hitDiscretion = "Class Example hit")
+	try :
+		with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
+			dsr.Add(data, dc, hitDiscretion = "Class Example hit")
+	except ValueError as e :
+		print(str(e))
 
 #------------------------------------------------------------------------------------------------------------------
 dsr.save("Example.dsr")
