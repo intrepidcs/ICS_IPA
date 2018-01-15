@@ -1,6 +1,7 @@
 from ICS_IPA import IPAInterfaceLibrary
 import sys
 import json
+import os
 
 class DSRFile:
 	def __init__(self):
@@ -12,7 +13,8 @@ class DSRFile:
 		self.hitDiscretion = hitDiscretion
 		self.data = data
 		if IPAInterfaceLibrary.is_running_on_wivi_server():
-			self.dsr["HitLists"].append({"id": data.dbFile["id"], "startDate": data.dbFile["startDate"], "vehicle": data.dbFile["vehicle"]})	
+			filenamewithoutpath = os.path.basename(data.dbFile["path"])
+			self.dsr["HitLists"].append({"id": data.dbFile["id"], "startDate": data.dbFile["startDate"], "vehicle": data.dbFile["vehicle"], "Filename": filenamewithoutpath})	
 		else:
 			self.dsr["HitLists"].append({"FilenameAndPath": data.dbFile["path"]})
 			
