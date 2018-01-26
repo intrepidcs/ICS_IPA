@@ -4,25 +4,29 @@ import numpy as np
 import pprint
 import json
 import logging
+import time
 
 from ICS_IPA.DataFileIOLibraryInterface import *
 
 logger = logging.getLogger(__name__)
-
-
-logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-
-# create a file handler
-handler = logging.FileHandler('IPA.log')
-handler.setLevel(logging.INFO)
 
 # create a logging format
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
+
+# create a file handler
+fh = logging.FileHandler('IPA.log')
+fh.setLevel(logging.INFO)
+fh.setFormatter(formatter)
+
+
+ch = logging.StreamHandler()
+ch.setLevel(logging.INFO)
+ch.setFormatter(formatter)
 
 # add the handlers to the logger
-logger.addHandler(handler)
+logger.addHandler(fh)
+#logger.addHandler(ch)
 
 
 class ICSDataFile:
@@ -33,29 +37,38 @@ class ICSDataFile:
 		@param AutoCleanUpTempFiles determins whether the generated files will be deleted 
 		'''	
 		try :
-			logger.info("initializing ICSDataFile")
+			t0 = time.time()
+
+			self.UsingTempDBFile = False
+			self.UsingTempSLFile = False
+
 			if isinstance(dbFile, str):
 				dbFile = {"path": dbFile}
 			elif "path" in dbFile:
 				pass
 			else:
 				raise ValueError('invalid db/mdf File Path')
+			
+			logger.info("Start Reading " + os.path.basename(dbFile["path"]))
 
-			self.UsingTempDBFile = False
-			self.UsingTempSLFile = False
 			
 			if os.path.splitext(slFilePath)[1] == '.asl':
 				slFilePath = self.__ResolveAliaces(dbFile["path"], slFilePath)
+				logger.debug("Aliaces Resolved")
 
 			dbFileName = self.__GetDBFilePath(dbFile["path"], slFilePath)
+			logger.debug("DB Created")
 			self.__OpenDataFile(dbFileName, slFilePath)
+			logger.debug("DB Opened")
 			self.__SetupIndexOperator(slFilePath)
+			logger.debug("Index Operator initialization complete")
 
 			self.RecordTimestamp = -1
 			self.dbFile = dbFile
 			self.dbFileName = dbFileName
 			self.slFilePath = slFilePath
 			self.AutoCleanUpTempFiles = AutoCleanUpTempFiles
+			logger.info("Finished Reading " + os.path.basename(dbFile["path"]) + " Time Taken " + str(time.time() - t0))
 		except ValueError as e:
 			logger.error(str(e))
 			raise
