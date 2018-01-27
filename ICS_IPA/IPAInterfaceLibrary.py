@@ -36,7 +36,7 @@ def get_input_file_list(autoConvertToDB = False):
                     if not os.path.isfile(name + ".db"):
                         DataFileIOLibrary.CreateDatabase(file_name, name + ".db")
                     filenames[idx] = name + ".db"
-        return [dict(("path", item ) for item in filenames)]
+        return [{"path": item} for item in filenames]
 
 def get_config_file():
     if is_wivi:
