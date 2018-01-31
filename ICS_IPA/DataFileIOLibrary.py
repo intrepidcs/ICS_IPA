@@ -41,6 +41,7 @@ class ICSDataFile:
 
 			self.UsingTempDBFile = False
 			self.UsingTempSLFile = False
+			self.AutoCleanUpTempFiles = AutoCleanUpTempFiles
 
 			if isinstance(dbFile, str):
 				dbFile = {"path": dbFile}
@@ -48,26 +49,24 @@ class ICSDataFile:
 				pass
 			else:
 				raise ValueError('invalid db/mdf File Path')
-			
-			logger.info("Start Reading " + os.path.basename(dbFile["path"]))
+			self.dbFile = dbFile
 
-			
+			logger.info("Start Reading " + os.path.basename(dbFile["path"]))
 			if os.path.splitext(slFilePath)[1] == '.asl':
-				slFilePath = self.__ResolveAliaces(dbFile["path"], slFilePath)
+				self.slFilePath = self.__ResolveAliaces(dbFile["path"], slFilePath)
 				logger.debug("Aliaces Resolved")
 
-			dbFileName = self.__GetDBFilePath(dbFile["path"], slFilePath)
+
+			self.dbFileName = self.__GetDBFilePath(dbFile["path"], self.slFilePath)
 			logger.debug("DB Created")
-			self.__OpenDataFile(dbFileName, slFilePath)
+
+			self.__OpenDataFile(self.dbFileName, self.slFilePath)
 			logger.debug("DB Opened")
-			self.__SetupIndexOperator(slFilePath)
+
+			self.__SetupIndexOperator(self.slFilePath)
 			logger.debug("Index Operator initialization complete")
 
 			self.RecordTimestamp = -1
-			self.dbFile = dbFile
-			self.dbFileName = dbFileName
-			self.slFilePath = slFilePath
-			self.AutoCleanUpTempFiles = AutoCleanUpTempFiles
 			logger.info("Finished Reading " + os.path.basename(dbFile["path"]) + " Time Taken " + str(time.time() - t0))
 		except ValueError as e:
 			logger.error(str(e))
