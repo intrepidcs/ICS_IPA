@@ -3,3 +3,4 @@ class Sig:
 	TransTurbineSpeed = 1
 	EngineSpeed = 2
 	AccelPedalPosition = 3
+	MaxIndexInSigClass = 3
