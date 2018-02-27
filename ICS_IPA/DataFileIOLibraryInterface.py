@@ -132,6 +132,10 @@ def GetNextChangedRecord(indatapointer):
     return _DataFileIOLibraryInterface.GetNextChangedRecord(indatapointer)
 GetNextChangedRecord = _DataFileIOLibraryInterface.GetNextChangedRecord
 
+def GetNextValidRecord(indatapointer):
+    return _DataFileIOLibraryInterface.GetNextValidRecord(indatapointer)
+GetNextValidRecord = _DataFileIOLibraryInterface.GetNextValidRecord
+
 def SetCursorsToStart(indatapointer):
     return _DataFileIOLibraryInterface.SetCursorsToStart(indatapointer)
 SetCursorsToStart = _DataFileIOLibraryInterface.SetCursorsToStart

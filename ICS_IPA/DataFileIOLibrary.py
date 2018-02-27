@@ -277,6 +277,19 @@ class ICSDataFile:
 		self.RecordTimestamp = GetNextChangedRecord(self.points)
 		return self.RecordTimestamp
 
+	def GetNextValidRecord(self):
+		""" Advances the cursor to the next timestamp.  This call updates the channel
+		 *  values and timestamps.  If only some channels are active, the next timestamp of
+		 *  an active channel is the one returned.
+		 *  
+		 *  If an error ocurred, the return value is DBL_MAX
+		 *
+		 *  @param indatapointer The datapointer value received from the OpenDataFile call
+		 *  @param n             The number of channels (size of the datapointer array)
+		 *  @return The actual timestamp the cursor is on
+		"""
+		self.RecordTimestamp = GetNextValidRecord(self.points)
+		return self.RecordTimestamp
 
 	def GetMeasurementTimeBounds(self):
 		""" Returns the start and end or measurement times found in the file.
