@@ -159,6 +159,10 @@ GetChannels = _DataFileIOLibraryInterface.GetChannels
 def GetChannelStatistics(pMdfFile, pJsonFile):
     return _DataFileIOLibraryInterface.GetChannelStatistics(pMdfFile, pJsonFile)
 GetChannelStatistics = _DataFileIOLibraryInterface.GetChannelStatistics
+
+def OutputHitsToFile(pScriptFile, pOutFile):
+    return _DataFileIOLibraryInterface.OutputHitsToFile(pScriptFile, pOutFile)
+OutputHitsToFile = _DataFileIOLibraryInterface.OutputHitsToFile
 # This file is compatible with both classic and new-style classes.
 
 

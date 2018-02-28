@@ -1,6 +1,6 @@
 from setuptools import setup
 
-version = '0.0.2.8'
+version = '0.0.2.9'
 
 setup(
 	name = 'ICS_IPA',
