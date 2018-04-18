@@ -24,8 +24,6 @@ log.addHandler(handler)
 
 log.info("Hello")
 
-
-
 slFilePath = IPAInterfaceLibrary.get_config_file()
 dbFilePaths = IPAInterfaceLibrary.get_input_file_list()
 
@@ -37,13 +35,16 @@ for dbFilePath in dbFilePaths:
 	try :
 		with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
 			
-			curTimestamp = data.JumpAfterTimestamp(0)
+			curTimestamp = data.JumpBeforeTimestamp(0)
 			dataPoints = data.GetPoints()
+			timeStamps = data.GetTimeStamps()
 			dsr.Begin(data)
 			ActiveMaskResult = data.SetActiveMask("0001")
 			while curTimestamp != sys.float_info.max:
 				dsr.IncludeCurrentRecord(dataPoints[Sig.AccelPedalPosition] > 80 and dataPoints[Sig.TransOutputSpeed] < 1600)
 				curTimestamp = data.GetNextRecord()
+				if curTimestamp > 19:
+					a = 1
 			dsr.End()
 	except ValueError as e :
 		print(str(e))
