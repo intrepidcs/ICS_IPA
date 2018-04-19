@@ -1,1 +1,1 @@
-import FindInFiles
+import FindInFilesExpInConfig

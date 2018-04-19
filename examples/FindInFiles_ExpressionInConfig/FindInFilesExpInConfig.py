@@ -92,8 +92,6 @@ for dbFilePath in dbFilePaths:
 					else:
 						SearchExpState[i] = eval(EndExpressionEval[i])							
 					if EventActive[i] == False and SearchExpState[i] == True:
-						if i == 2:
-							SearchExpState[i] = SearchExpState[i]
 						SearchExpStartTime[i] = curTimestamp
 						EventActive[i] = True
 						TimeFromExpressionStart[i] = 0
@@ -108,6 +106,10 @@ for dbFilePath in dbFilePaths:
 					EventActivePrev[i] = EventActive[i]
 				dataPointsPrev = dataPoints.copy()# copy previous loops record array to new array
 				curTimestamp = data.GetNextRecord()
+			#if any events are active at the end of file, log the last time stamp as the end of hit
+			for i, expressionStart in enumerate(StartExpressionEval):
+				if EventActive[i]:
+					dsr.LogHit(EventDescription_list[i], SearchExpStartTime[i], data.GetMeasurementTimeBounds()[2] - data.GetMeasurementTimeBounds()[1])
 
 	except ValueError as e :
 		print(str(e))
