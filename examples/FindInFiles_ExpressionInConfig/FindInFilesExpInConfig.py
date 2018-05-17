@@ -82,7 +82,6 @@ for dbFilePath in dbFilePaths:
 		with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
 			curTimestamp = data.JumpBeforeTimestamp(0)
 			dataPoints = data.GetPoints()
-			dsr.StartDSR(data)
 			dataPointsPrev = dataPoints.copy()
 			ActiveMaskResult = data.SetActiveMask("00010")
 			while curTimestamp != sys.float_info.max:
@@ -90,7 +89,7 @@ for dbFilePath in dbFilePaths:
 					if EventActive[i] == False:
 						SearchExpState[i] = eval(expressionStart)	
 					else:
-						SearchExpState[i] = eval(EndExpressionEval[i])							
+						SearchExpState[i] = eval(EndExpressionEval[i])
 					if EventActive[i] == False and SearchExpState[i] == True:
 						SearchExpStartTime[i] = curTimestamp
 						EventActive[i] = True
@@ -98,7 +97,7 @@ for dbFilePath in dbFilePaths:
 					if EventActive[i] and EventActivePrev[i]:
 						if SearchExpState[i] == True:
 							SearchExpEndTime[i] = curTimestamp
-							dsr.LogHit(EventDescription_list[i], SearchExpStartTime[i], SearchExpEndTime[i])
+							dsr.IncludeHit(data, SearchExpStartTime[i], SearchExpEndTime[i], EventDescription_list[i])
 							EventActive[i] = False
 							TimeFromExpressionStart[i] = - 1
 						else:
@@ -109,7 +108,7 @@ for dbFilePath in dbFilePaths:
 			#if any events are active at the end of file, log the last time stamp as the end of hit
 			for i, expressionStart in enumerate(StartExpressionEval):
 				if EventActive[i]:
-					dsr.LogHit(EventDescription_list[i], SearchExpStartTime[i], data.GetMeasurementTimeBounds()[2] - data.GetMeasurementTimeBounds()[1])
+					dsr.LogHit(data, SearchExpStartTime[i], data.GetMeasurementTimeBounds()[2] - data.GetMeasurementTimeBounds()[1], EventDescription_list[i])
 
 	except ValueError as e :
 		print(str(e))
