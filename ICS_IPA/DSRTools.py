@@ -1,15 +1,20 @@
 from ICS_IPA import IPAInterfaceLibrary
+from ICS_IPA import DataFileIOLibrary
+from typing import Callable
+from typing import List
+from typing import Type
 import sys
 import json
 import os
 
+ICSDataFileType = Type[DataFileIOLibrary.ICSDataFile]
 class DSRFile:
 	def __init__(self):
 		self.dsr =  {"HitList" : []}
 		self.data_to_hitlist = {}
 
 #--------------------------------------------------------- method 1 ------------------------------------------------------
-	def Begin(self, data, hitDescription = "Hit number ", initTrigger=False):
+	def Begin(self, data: ICSDataFileType, hitDescription: str = "Hit number ", initTrigger: bool =False) -> None:
 		self.numRec = 0
 		self.triggered = initTrigger
 		self.hitDescription = hitDescription
@@ -21,7 +26,7 @@ class DSRFile:
 			self.dsr["HitList"].append({"FilenameAndPath": data.dbFile["path"]})
 		self.data_to_hitlist[data] = self.dsr["HitList"][-1]
 
-	def IncludeCurrentRecord(self, included):
+	def IncludeCurrentRecord(self, included: bool) -> None:
 		if included:
 			if not self.triggered:
 				if "Hits" not in self.dsr["HitList"][-1]:
@@ -39,7 +44,7 @@ class DSRFile:
 
 #--------------------------------------------------------- method 2 ------------------------------------------------------
 
-	def IncludeHit(self, data, hitStartTime, hitEndTime, hitDescription = "Include Hit"):
+	def IncludeHit(self, data: ICSDataFileType, hitStartTime: float, hitEndTime: float, hitDescription: str = "Include Hit") -> None:
 		if data not in self.data_to_hitlist:
 			self.Begin(data)
 		hitlist = self.data_to_hitlist[data]
@@ -48,9 +53,10 @@ class DSRFile:
 			hitlist["Hits"] = []
 		hitlist["Hits"].append({"Description" : hitDescription, "StartTime": hitStartTime, "EndTime": hitEndTime})
 
+
 #--------------------------------------------------------- method 3 ------------------------------------------------------
 
-	def Add(self, data, callback, hitDiscretion = "Hit number ", initTrigger=False):
+	def Add(self, data: ICSDataFileType, callback: Callable[[List, List], bool], hitDiscretion: str = "Hit number ", initTrigger=False) -> None:
 		'''
 		the Add function takes two arguments the first being ICSData class and the second being a function with two paramaters as an argument
 		The Add calls the function for every data point it iterates though to determan if it should be included in the DSR file

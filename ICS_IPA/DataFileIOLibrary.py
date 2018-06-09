@@ -1,3 +1,5 @@
+from typing import TypeVar
+
 import sys
 import os
 import numpy as np
@@ -28,9 +30,8 @@ ch.setFormatter(formatter)
 logger.addHandler(fh)
 #logger.addHandler(ch)
 
-
 class ICSDataFile:
-	def __init__(self, dbFile, slFilePath, AutoCleanUpTempFiles = True):
+	def __init__(self, dbFile: TypeVar('T', str, dict), slFilePath: str, AutoCleanUpTempFiles:bool = True):
 		'''
 		@param dbFile this can ether be a MDF or a db file generated from an MDF
 		@param slFilePath this can ether be a sl file or an asl file
@@ -70,7 +71,7 @@ class ICSDataFile:
 			logger.info("Finished Reading " + os.path.basename(dbFile["path"]) + " Time Taken " + str(time.time() - t0))
 		except ValueError as e:
 			logger.error(str(e))
-			raise
+			raise e
 
 	def __del__(self):
 		try:
@@ -84,7 +85,8 @@ class ICSDataFile:
 			os.remove(self.slFilePath)
 			self.slFilePath = ''
 
-	def __getitem__(self, key):
+
+	def __getitem__(self, key: TypeVar('A', str, bytes)):
 		''' this method of retrieving data is slower then simply asking for the timestamp and points array'''
 		if type(key) == str and key in self.nameToIndex:
 			index = self.nameToIndex[key]
@@ -109,7 +111,7 @@ class ICSDataFile:
 			os.remove(self.slFilePath)
 			self.slFilePath = ''
 	
-	def __GetDBFilePath(self, dbFileName, slFilePath):
+	def __GetDBFilePath(self, dbFileName: str, slFilePath: str) -> str:
 		''' 
 		Called by the constructor to create/verify db file. 
 		The db file is created if the filename given is not a db file 
@@ -127,7 +129,7 @@ class ICSDataFile:
 				dbFileName = name + ".db"
 		return dbFileName
 
-	def __OpenDataFile(self, dbFileName, slFilePath):
+	def __OpenDataFile(self, dbFileName: str, slFilePath: str):
 		self.measStart, self.points, self.timestamps = OpenDataFile(dbFileName, slFilePath)
 		if self.measStart == 0:
 			logger.warning("The number of data channels found does not match the number of channels in the JSON file")
@@ -138,15 +140,15 @@ class ICSDataFile:
 		elif self.measStart == -3:
 			raise ValueError('The JSON file is invalid')
 
-	def __SetupIndexOperator(self, slFilePath):
+	def __SetupIndexOperator(self, slFilePath: str):
 		with open(slFilePath) as data_file:
 			data = json.load(data_file)
 			self.nameToIndex = { channel["name"]: index for index, channel in enumerate(data["Channels"])}
 			self.indexToName = { index: channel["name"] for index, channel in enumerate(data["Channels"])}
 
-	def __ResolveAliaces(self, dbFile, aslFilePath):
+	def __ResolveAliaces(self, dbFilePath: str, aslFilePath: str):
 		'''
-		@param dbFile is the database file that you would like to open
+		@param dbFilePath is the database file that you would like to open
 		@parama slFilePath is the presumed JSON file with aliases
 
 		@returns JSON file with resolved aliaces if file is valid,
@@ -157,7 +159,7 @@ class ICSDataFile:
 		filename, extension = os.path.splitext(filename)
 		newfilename = '%s%s' % (filename,  ".sl")
 		newpath = os.path.join(path, newfilename)
-		self.numChannels = ValidateSignals(dbFile, aslFilePath, newpath)
+		self.numChannels = ValidateSignals(dbFilePath, aslFilePath, newpath)
 
 		if self.numChannels <= 0:
 			newpath = aslFilePath
@@ -173,7 +175,7 @@ class ICSDataFile:
 			raise ValueError('The JSON file is invalid')
 		return newpath
 	
-	def indexOfSignal(self, sigName):
+	def indexOfSignal(self, sigName: str):
 		return self.nameToIndex[sigName] if sigName in self.nameToIndex else -1
 
 	def GetNumChannels(self):
@@ -187,7 +189,7 @@ class ICSDataFile:
 
 	def GetTimeStamps(self):
 		"""
-		Returns an numpy array containg the timestamp for each signal at 
+		Returns an numpy array containing the timestamp for each signal at 
 		"""
 		return self.timestamps
 
@@ -195,7 +197,7 @@ class ICSDataFile:
 		self.RecordTimestamp = SetCursorsToStart(self.points)
 		return RecordTimestamp
 
-	def SetActiveMask(self, mask):
+	def SetActiveMask(self, mask: str):
 		""" Allows the user to position the time cursor just before or at the specified
 		 *  time value.  This call updates the channel values and timestamps.  If only some 
 		 *  channels are active, the nearest active channel's timestamp is used.
@@ -210,7 +212,7 @@ class ICSDataFile:
 		 """
 		return SetActiveMask(self.points, mask)	
 
-	def JumpAfterTimestamp(self, timestamp):
+	def JumpAfterTimestamp(self, timestamp: TypeVar('A', float, int)) -> float:
 		""" Allows the user to position the time cursor just after or at the specified
 		*  time value.  This call updates the channel values and timestamps.  The first
 		*  timestamp where all channels have a value and which is at or after the requested
@@ -228,7 +230,7 @@ class ICSDataFile:
 		self.RecordTimestamp = JumpAfterTimestamp(self.points, timestamp) 
 		return self.RecordTimestamp
 
-	def JumpBeforeTimestamp(self, timestamp):
+	def JumpBeforeTimestamp(self, timestamp: TypeVar('A', float, int)) -> float:
 		""" Allows the user to position the time cursor just before or at the specified
 		 *  time value.  This call updates the channel values and timestamps.  The first
 		 *  timestamp where all channels have a value and which is at or after the requested
@@ -240,51 +242,43 @@ class ICSDataFile:
 		 *  Timestamps represent the number of seconds since January 1, 2007.  The decimals 
 		 *  represent fractions of seconds.
 		 *
-		 *  @param indatapointer The datapointer value received from the OpenDataFile call
-		 *  @param n             The number of channels (size of the datapointer array)
-		 *  @param dTime         The timestamp to jump to
+		 *  @param timestamp         The timestamp to jump to
 		 *  @return The actual timestamp the cursor is on
 		"""
-		self.RecordTimestamp = JumpBeforeTimestamp(self.points, timestamp)
+		self.RecordTimestamp = JumpBeforeTimestamp(self.points, timestamp) 
 		return self.RecordTimestamp
 
-	def GetNextRecord(self):
+	def GetNextRecord(self) -> float:
 		""" Advances the cursor to the next timestamp.  This call updates the channel
 		 *  values and timestamps.  If only some channels are active, the next timestamp of
 		 *  an active channel is the one returned.
 		 *  
 		 *  If an error ocurred, the return value is DBL_MAX
 		 *
-		 *  @param indatapointer The datapointer value received from the OpenDataFile call
-		 *  @param n             The number of channels (size of the datapointer array)
 		 *  @return The actual timestamp the cursor is on
 		"""
 		self.RecordTimestamp = GetNextRecord(self.points)
 		return self.RecordTimestamp
 
-	def GetNextChangedRecord(self):
+	def GetNextChangedRecord(self) -> float:
 		""" Advances the cursor to the next record with changed signal values.
 		*  This call updates the channel values and timestamps.  If only some channels are 
 		*  active, the next timestamp of an active channel is the one returned.
 		*  
 		*  If an error ocurred, the return value is DBL_MAX
 		*
-		*  @param indatapointer The datapointer value received from the OpenDataFile call
-		*  @param n             The number of channels (size of the datapointer array)
 		*  @return The actual timestamp the cursor is on
 		"""
 		self.RecordTimestamp = GetNextChangedRecord(self.points)
 		return self.RecordTimestamp
 
-	def GetNextValidRecord(self):
+	def GetNextValidRecord(self) -> float:
 		""" Advances the cursor to the next timestamp.  This call updates the channel
 		 *  values and timestamps.  If only some channels are active, the next timestamp of
 		 *  an active channel is the one returned.
 		 *  
 		 *  If an error ocurred, the return value is DBL_MAX
 		 *
-		 *  @param indatapointer The datapointer value received from the OpenDataFile call
-		 *  @param n             The number of channels (size of the datapointer array)
 		 *  @return The actual timestamp the cursor is on
 		"""
 		self.RecordTimestamp = GetNextValidRecord(self.points)

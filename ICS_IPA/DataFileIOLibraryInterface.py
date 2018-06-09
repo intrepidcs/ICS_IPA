@@ -96,71 +96,71 @@ except __builtin__.Exception:
     _newclass = 0
 
 
-def GetNumChannels(pJsonFile):
+def GetNumChannels(pJsonFile: 'char const *') -> "int":
     return _DataFileIOLibraryInterface.GetNumChannels(pJsonFile)
 GetNumChannels = _DataFileIOLibraryInterface.GetNumChannels
 
-def ValidateSignals(pDbFile, pPrioritizedSignalJsonFile, pValidSignalJsonFile):
+def ValidateSignals(pDbFile: 'char const *', pPrioritizedSignalJsonFile: 'char const *', pValidSignalJsonFile: 'char const *') -> "int":
     return _DataFileIOLibraryInterface.ValidateSignals(pDbFile, pPrioritizedSignalJsonFile, pValidSignalJsonFile)
 ValidateSignals = _DataFileIOLibraryInterface.ValidateSignals
 
-def OpenDataFile(pDataFile, pJsonFile):
+def OpenDataFile(pDataFile: 'char const *', pJsonFile: 'char const *') -> "int *, int *":
     return _DataFileIOLibraryInterface.OpenDataFile(pDataFile, pJsonFile)
 OpenDataFile = _DataFileIOLibraryInterface.OpenDataFile
 
-def GetMeasurementTimeBounds(indatapointer):
+def GetMeasurementTimeBounds(indatapointer: 'double *') -> "double *, double *":
     return _DataFileIOLibraryInterface.GetMeasurementTimeBounds(indatapointer)
 GetMeasurementTimeBounds = _DataFileIOLibraryInterface.GetMeasurementTimeBounds
 
-def SetActiveMask(indatapointer, pMask):
+def SetActiveMask(indatapointer: 'double *', pMask: 'char const *') -> "int":
     return _DataFileIOLibraryInterface.SetActiveMask(indatapointer, pMask)
 SetActiveMask = _DataFileIOLibraryInterface.SetActiveMask
 
-def JumpBeforeTimestamp(indatapointer, dTime):
+def JumpBeforeTimestamp(indatapointer: 'double *', dTime: 'double') -> "double":
     return _DataFileIOLibraryInterface.JumpBeforeTimestamp(indatapointer, dTime)
 JumpBeforeTimestamp = _DataFileIOLibraryInterface.JumpBeforeTimestamp
 
-def JumpAfterTimestamp(indatapointer, dTime):
+def JumpAfterTimestamp(indatapointer: 'double *', dTime: 'double') -> "double":
     return _DataFileIOLibraryInterface.JumpAfterTimestamp(indatapointer, dTime)
 JumpAfterTimestamp = _DataFileIOLibraryInterface.JumpAfterTimestamp
 
-def GetNextRecord(indatapointer):
+def GetNextRecord(indatapointer: 'double *') -> "double":
     return _DataFileIOLibraryInterface.GetNextRecord(indatapointer)
 GetNextRecord = _DataFileIOLibraryInterface.GetNextRecord
 
-def GetNextChangedRecord(indatapointer):
+def GetNextChangedRecord(indatapointer: 'double *') -> "double":
     return _DataFileIOLibraryInterface.GetNextChangedRecord(indatapointer)
 GetNextChangedRecord = _DataFileIOLibraryInterface.GetNextChangedRecord
 
-def GetNextValidRecord(indatapointer):
+def GetNextValidRecord(indatapointer: 'double *') -> "double":
     return _DataFileIOLibraryInterface.GetNextValidRecord(indatapointer)
 GetNextValidRecord = _DataFileIOLibraryInterface.GetNextValidRecord
 
-def SetCursorsToStart(indatapointer):
+def SetCursorsToStart(indatapointer: 'double *') -> "double":
     return _DataFileIOLibraryInterface.SetCursorsToStart(indatapointer)
 SetCursorsToStart = _DataFileIOLibraryInterface.SetCursorsToStart
 
-def CloseDataFile(indatapointer):
+def CloseDataFile(indatapointer: 'double *') -> "int":
     return _DataFileIOLibraryInterface.CloseDataFile(indatapointer)
 CloseDataFile = _DataFileIOLibraryInterface.CloseDataFile
 
-def CreateDatabase(pMdfFile, pDbFile):
+def CreateDatabase(pMdfFile: 'char const *', pDbFile: 'char const *') -> "int":
     return _DataFileIOLibraryInterface.CreateDatabase(pMdfFile, pDbFile)
 CreateDatabase = _DataFileIOLibraryInterface.CreateDatabase
 
-def CreateDatabaseForSignals(pMdfFile, pJsonFile, pDbFile):
+def CreateDatabaseForSignals(pMdfFile: 'char const *', pJsonFile: 'char const *', pDbFile: 'char const *') -> "int":
     return _DataFileIOLibraryInterface.CreateDatabaseForSignals(pMdfFile, pJsonFile, pDbFile)
 CreateDatabaseForSignals = _DataFileIOLibraryInterface.CreateDatabaseForSignals
 
-def GetChannels(pMdfFile, pJsonFile):
+def GetChannels(pMdfFile: 'char const *', pJsonFile: 'char const *') -> "int":
     return _DataFileIOLibraryInterface.GetChannels(pMdfFile, pJsonFile)
 GetChannels = _DataFileIOLibraryInterface.GetChannels
 
-def GetChannelStatistics(pMdfFile, pJsonFile):
+def GetChannelStatistics(pMdfFile: 'char const *', pJsonFile: 'char const *') -> "int":
     return _DataFileIOLibraryInterface.GetChannelStatistics(pMdfFile, pJsonFile)
 GetChannelStatistics = _DataFileIOLibraryInterface.GetChannelStatistics
 
-def OutputHitsToFile(pScriptFile, pOutFile):
+def OutputHitsToFile(pScriptFile: 'char const *', pOutFile: 'char const *') -> "int":
     return _DataFileIOLibraryInterface.OutputHitsToFile(pScriptFile, pOutFile)
 OutputHitsToFile = _DataFileIOLibraryInterface.OutputHitsToFile
 # This file is compatible with both classic and new-style classes.
