@@ -104,7 +104,7 @@ for dbFilePath in dbFilePaths:
 					if EventActive[i] == False:
 						SearchExpState[i] = eval(expressionStart)	
 					else:
-						SearchExpState[i] = eval(EndExpressionEval[i])							
+						SearchExpState[i] = eval(EndExpressionEval[i])
 					if EventActive[i] == False and SearchExpState[i] == True:
 						SearchExpStartTime[i] = curTimestamp
 						EventActive[i] = True

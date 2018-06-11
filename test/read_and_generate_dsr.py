@@ -5,30 +5,29 @@ import enum
 import sys
 import os
 import logging
-import time 
-
-logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
-
-ch = logging.StreamHandler()
-ch.setLevel(logging.INFO)
-
-logger.addHandler(ch)
 
 from ICS_IPA import DataFileIOLibrary as icsFI
 from ICS_IPA import DSRTools as icsDSR
 from ICS_IPA import IPAInterfaceLibrary
 
-slFilePath = IPAInterfaceLibrary.get_config_file()
-dbFilePaths = IPAInterfaceLibrary.get_input_file_list()
+slFilePath = "../examples/findInFiles/ConfigForSampleDataFileDemo.asl"
+dbFilePaths = [{"path": "../examples/Data/SampleDataFiles/DataSpySampleDataFileAllSignals1.db"}]
 
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger(__name__)
+handler = logging.FileHandler('IPA.log')
+handler.setLevel(logging.INFO)
 
+# create a logging format
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(message)s')
+handler.setFormatter(formatter)
+log.addHandler(handler)
+log.info("Hello")
 
 #------------------------------------------------------------------------------------------------------------------
 dsr = icsDSR.DSRFile()
 #there are multiple methods to save to a dsr file.
 
-t0 = time.time()
 for dbFilePath in dbFilePaths:
 	try :
 		with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
@@ -45,11 +44,9 @@ for dbFilePath in dbFilePaths:
 			dsr.End()
 	except ValueError as e :
 		print(str(e))
-logger.info("Finished DSR  Time Taken " + str(time.time() - t0)) 
+ 
 #------------------------------------------------------------------------------------------------------------------
 
-
-t0 = time.time()
 for dbFilePath in dbFilePaths:
 	try :
 		with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
@@ -65,14 +62,41 @@ for dbFilePath in dbFilePaths:
 			dsr.Add(data, lambda v, t: v[accelpedalPostionIndex] > 80 and v[transOutputSpeedIndex] < 1600)
 	except ValueError as e :
 		print(str(e))
-logger.info("Finished DSR  Time Taken " + str(time.time() - t0)) 
+#------------------------------------------------------------------------------------------------------------------
+
+for dbFilePath in dbFilePaths:
+	try :
+		trigger = False
+		start = 0
+		with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
+
+			accelpedalPostionIndex = data.indexOfSignal("AccelPedalPosition")
+			transOutputSpeedIndex = data.indexOfSignal("TransOutputSpeed")
+
+				
+			curTimestamp = data.JumpAfterTimestamp(0)
+			dataPoints = data.GetPoints()
+			while curTimestamp != sys.float_info.max:
+				query = dataPoints[accelpedalPostionIndex] > 80 and dataPoints[transOutputSpeedIndex] < 1600
+				if query and not trigger:
+					trigger = not trigger
+					start = curTimestamp
+				elif not query and trigger:
+					trigger = not trigger
+					dsr.IncludeHit(data, start, curTimestamp, "hit test")
+				curTimestamp = data.GetNextRecord()
+	except ValueError as e :
+		print(str(e))
 
 #------------------------------------------------------------------------------------------------------------------
 #The second simply passes a function
+class Sig:
+	TransOutputSpeed = 0
+	AccelPedalPosition = -1 
 
-t0 = time.time()
 def checkFullThrotel (values, timestamp):
-	return values[0] > 80 and values[1] < 1600
+	return values[Sig.AccelPedalPosition] > 80 and values[Sig.TransOutputSpeed] < 1600
+
 
 for dbFilePath in dbFilePaths:
 	try :
@@ -81,54 +105,45 @@ for dbFilePath in dbFilePaths:
 
 	except ValueError as e :
 		print(str(e))
-logger.info("Finished DSR  Time Taken " + str(time.time() - t0)) 
-
 #------------------------------------------------------------------------------------------------------------------
 #The Third method uses a class
-t0 = time.time()
 class dataCheck:
-	def __init__(self, data):
+	def __init__(self):
 		self.AccelPedalPositionMax = 80
-		self.TransOutputSpeedMin = 1600		
-		self.accelpedalPostionIndex = data.indexOfSignal("AccelPedalPosition")
-		self.transOutputSpeedIndex = data.indexOfSignal("TransOutputSpeed")
+		self.TransOutputSpeedMin = 1600
 
 	def __call__(self, values, timestamp): #this is the required callback function for the class
-		return values[self.accelpedalPostionIndex] > self.AccelPedalPositionMax and values[self.transOutputSpeedIndex] < self.TransOutputSpeedMin
+		return values[Sig.AccelPedalPosition] > self.AccelPedalPositionMax and values[Sig.TransOutputSpeed] < self.TransOutputSpeedMin
 
-
+dc = dataCheck()
 for dbFilePath in dbFilePaths:
 	try :
-		with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:	
-			dc = dataCheck(data)
+		with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:		
 			dsr.Add(data, dc, hitDiscretion = "Class Example hit")
 	except ValueError as e :
 		print(str(e))
-logger.info("Finished DSR  Time Taken " + str(time.time() - t0)) 
 
 #------------------------------------------------------------------------------------------------------------------
 
-t0 = time.time()
+#The Third method uses a class
 class AdvancedDataCheck:
 	def __init__(self):
 		self.previousAccelPedalPosition = None
 		self.TransOutputSpeedMin = 1600
-		self.accelpedalPostionIndex = data.indexOfSignal("AccelPedalPosition")
 
 	def __call__(self, values, timestamp): #this is the required callback function for the class
 		if self.previousAccelPedalPosition is None:
-			return False			
-		returnval =  self.accelpedalPostionIndex > values[self.accelpedalPostionIndex] + 10 
-		self.previousAccelPedalPosition = values[self.accelpedalPostionIndex]
-		return returnval
+			self.previousAccelPedalPosition = values[Sig.AccelPedalPosition]
+			return 
+		return values[Sig.AccelPedalPosition] > self.AccelPedalPositionMax and values[Sig.TransOutputSpeed] < self.TransOutputSpeedMin
 
+dc = dataCheck()
 for dbFilePath in dbFilePaths:
 	try :
 		with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
-			dsr.Add(data, dataCheck(data), hitDiscretion = "Class Example hit")
+			dsr.Add(data, dc, hitDiscretion = "Class Example hit")
 	except ValueError as e :
 		print(str(e))
-logger.info("Finished DSR  Time Taken " + str(time.time() - t0)) 
 
 #------------------------------------------------------------------------------------------------------------------
-dsr.save("Example.dsr")
+dsr.save("test.dsr")
