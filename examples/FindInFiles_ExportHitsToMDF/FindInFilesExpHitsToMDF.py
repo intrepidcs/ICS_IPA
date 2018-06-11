@@ -13,8 +13,7 @@ from ICS_IPA import DSRTools as icsDSR
 from ICS_IPA import IPAInterfaceLibrary
 from  SigEnumFile import Sig 
 
-
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
 handler = logging.FileHandler('IPA.log')
 handler.setLevel(logging.INFO)
@@ -98,13 +97,13 @@ for dbFilePath in dbFilePaths:
 			for i, expressionStart in enumerate(StartExpressionEval):
 				EventActive[i] = False
 				EventActivePrev[i] = False
-				SearchExpState[i] = False			
+				SearchExpState[i] = False
 			while curTimestamp != sys.float_info.max:
 				for i, expressionStart in enumerate(StartExpressionEval):
 					if EventActive[i] == False:
 						SearchExpState[i] = eval(expressionStart)	
 					else:
-						SearchExpState[i] = eval(EndExpressionEval[i])							
+						SearchExpState[i] = eval(EndExpressionEval[i])
 					if EventActive[i] == False and SearchExpState[i] == True:
 						SearchExpStartTime[i] = curTimestamp
 						EventActive[i] = True
@@ -120,18 +119,30 @@ for dbFilePath in dbFilePaths:
 					EventActivePrev[i] = EventActive[i]
 				dataPointsPrev = dataPoints.copy()# copy previous loops record array to new array
 				curTimestamp = data.GetNextRecord()
+				#log.info(str(curTimestamp))
 			#if any events are active at the end of file, log the last time stamp as the end of hit
 			for i, expressionStart in enumerate(StartExpressionEval):
 				if EventActive[i]:
 					dsr.IncludeHit(data, SearchExpStartTime[i], data.GetMeasurementTimeBounds()[2] - data.GetMeasurementTimeBounds()[1], EventDescription_list[i])
-
 	except ValueError as e :
 		print(str(e))
- 
+
 #------------------------------------------------------------------------------------------------------------------
 ReportGenTimeStamp = datetime.datetime.now().strftime("%m-%d-%y_%H-%M-%S")
 DSRFilename = "FindInFiles_" + ReportGenTimeStamp + ".dsr" 
 #------------------------------------------------------------------------------------------------------------------
+
+# now combine the signal list and hit list to a new JSON file and output to an mdf file
+SignalListWithHitList = {"SpacingBetweenHitsInOuputFile" : 1}
+SignalListWithHitList.update(config)
+SignalListWithHitList.update(dsr.dsr)#["HitList"])suggestiong from Zaid
+OutputJSONFileNameAndPath = os.getcwd() + "\OutputHitList_" + ReportGenTimeStamp + ".json"
+with open(OutputJSONFileNameAndPath, 'w') as outfile:
+	json.dump(SignalListWithHitList, outfile, sort_keys=True, indent=4)
+MDFOutputFileNameAndPath = os.getcwd() + "\MDFSubset_" + ReportGenTimeStamp + ".mf4"
+
+OutputHitsResult = icsFI.OutputHitsToFile(OutputJSONFileNameAndPath, MDFOutputFileNameAndPath)
+
 log.info("Good Bye")
 
 dsr.save(DSRFilename)
