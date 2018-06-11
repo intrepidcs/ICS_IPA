@@ -1,0 +1,539 @@
+{
+    "Channels": [
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "TransOutputSpeed",
+                    "message_name": "Group0011",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "TransOutputSpeed"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "TransTurbineSpeed",
+                    "message_name": "Group0012",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "TransTurbineSpeed"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EngineSpeed",
+                    "message_name": "Group0013",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EngineSpeed"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "AccelPedalPosition",
+                    "message_name": "Group0020",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "AccelPedalPosition"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EngineStateVariable1",
+                    "message_name": "Group0010",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EngineStateVariable1"
+        }
+    ],
+    "EventDefinitions": [
+        {
+            "Description": "WOTLaunchFromRest",
+            "EndExpression": "(AccelPedalPosition < 50) or (TransOutputSpeed > 1000)",
+            "StartExpression": "(AccelPedalPosition > 80) and (TransOutputSpeed < 100)"
+        },
+        {
+            "Description": "TipOutUpshifts",
+            "EndExpression": "(EngineSpeed < 2000)",
+            "StartExpression": "(AccelPedalPosition < 40) and (EngineSpeed > 4000)"
+        },
+        {
+            "Description": "EngineStateVariableChangeFrom9To10",
+            "EndExpression": "(TimeFromExpStart > 2)",
+            "StartExpression": "(EngineStateVariable1 == 9) and (Prev__EngineStateVariable1 == 8)"
+        }
+    ],
+    "HitList": [
+        {
+            "FilenameAndPath": "C:/Jmitchell/DataSpy/SourceCode/ICS_IPA_FORK/SampleDataFiles/DataSpySampleDataFileAllSignals1.db",
+            "Hits": [
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 37.81936073303223,
+                    "StartTime": 35.80622589588165
+                },
+                {
+                    "Description": "WOTLaunchFromRest",
+                    "EndTime": 39.58238410949707,
+                    "StartTime": 38.056864619255066
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 39.94499200582504,
+                    "StartTime": 37.931904673576355
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 48.49747771024704,
+                    "StartTime": 46.48445624113083
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 64.15206372737885,
+                    "StartTime": 62.13895493745804
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 69.85369628667831,
+                    "StartTime": 67.84061795473099
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 93.73570901155472,
+                    "StartTime": 91.72255426645279
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 112.39117908477783,
+                    "StartTime": 110.37800943851471
+                },
+                {
+                    "Description": "TipOutUpshifts",
+                    "EndTime": 132.87205201387405,
+                    "StartTime": 130.89648991823196
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 217.32143312692642,
+                    "StartTime": 215.30828231573105
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 234.77647829055786,
+                    "StartTime": 232.76328444480896
+                },
+                {
+                    "Description": "TipOutUpshifts",
+                    "EndTime": 273.65018343925476,
+                    "StartTime": 270.99939572811127
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 283.9406780600548,
+                    "StartTime": 281.92749440670013
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 370.2904369831085,
+                    "StartTime": 368.27743768692017
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 422.6555200815201,
+                    "StartTime": 420.64242964982986
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 470.19419699907303,
+                    "StartTime": 468.1810454130173
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 513.7566492557526,
+                    "StartTime": 511.7435157895088
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 537.5128461718559,
+                    "StartTime": 535.4996817708015
+                },
+                {
+                    "Description": "TipOutUpshifts",
+                    "EndTime": 549.628805398941,
+                    "StartTime": 545.8401907682419
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 593.1545251011848,
+                    "StartTime": 591.141439139843
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 619.3370268344879,
+                    "StartTime": 617.3238800764084
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 627.4642513990402,
+                    "StartTime": 625.4512989521027
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 644.793679356575,
+                    "StartTime": 642.7805349826813
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 679.2788456082344,
+                    "StartTime": 677.2656090259552
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 743.72284501791,
+                    "StartTime": 741.7097282409668
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 759.8275154829025,
+                    "StartTime": 757.8144155740738
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 770.3554980158806,
+                    "StartTime": 768.3424119353294
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 786.0100272297859,
+                    "StartTime": 783.9969446659088
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 801.3394746184349,
+                    "StartTime": 799.3262809514999
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 873.3352127671242,
+                    "StartTime": 871.322128534317
+                }
+            ]
+        },
+        {
+            "FilenameAndPath": "C:/Jmitchell/DataSpy/SourceCode/ICS_IPA_FORK/SampleDataFiles/DataSpySampleDataFileAllSignals2.db",
+            "Hits": [
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 37.81936073303223,
+                    "StartTime": 35.80622589588165
+                },
+                {
+                    "Description": "WOTLaunchFromRest",
+                    "EndTime": 39.58238410949707,
+                    "StartTime": 38.056864619255066
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 39.94499200582504,
+                    "StartTime": 37.931904673576355
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 48.49747771024704,
+                    "StartTime": 46.48445624113083
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 64.15206372737885,
+                    "StartTime": 62.13895493745804
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 69.85369628667831,
+                    "StartTime": 67.84061795473099
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 93.73570901155472,
+                    "StartTime": 91.72255426645279
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 112.39117908477783,
+                    "StartTime": 110.37800943851471
+                },
+                {
+                    "Description": "TipOutUpshifts",
+                    "EndTime": 132.87205201387405,
+                    "StartTime": 130.89648991823196
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 217.32143312692642,
+                    "StartTime": 215.30828231573105
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 234.77647829055786,
+                    "StartTime": 232.76328444480896
+                },
+                {
+                    "Description": "TipOutUpshifts",
+                    "EndTime": 273.65018343925476,
+                    "StartTime": 270.99939572811127
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 283.9406780600548,
+                    "StartTime": 281.92749440670013
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 370.2904369831085,
+                    "StartTime": 368.27743768692017
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 422.6555200815201,
+                    "StartTime": 420.64242964982986
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 470.19419699907303,
+                    "StartTime": 468.1810454130173
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 513.7566492557526,
+                    "StartTime": 511.7435157895088
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 537.5128461718559,
+                    "StartTime": 535.4996817708015
+                },
+                {
+                    "Description": "TipOutUpshifts",
+                    "EndTime": 549.628805398941,
+                    "StartTime": 545.8401907682419
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 593.1545251011848,
+                    "StartTime": 591.141439139843
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 619.3370268344879,
+                    "StartTime": 617.3238800764084
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 627.4642513990402,
+                    "StartTime": 625.4512989521027
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 644.793679356575,
+                    "StartTime": 642.7805349826813
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 679.2788456082344,
+                    "StartTime": 677.2656090259552
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 743.72284501791,
+                    "StartTime": 741.7097282409668
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 759.8275154829025,
+                    "StartTime": 757.8144155740738
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 770.3554980158806,
+                    "StartTime": 768.3424119353294
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 786.0100272297859,
+                    "StartTime": 783.9969446659088
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 801.3394746184349,
+                    "StartTime": 799.3262809514999
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 873.3352127671242,
+                    "StartTime": 871.322128534317
+                }
+            ]
+        },
+        {
+            "FilenameAndPath": "C:/Jmitchell/DataSpy/SourceCode/ICS_IPA_FORK/SampleDataFiles/DataSpySampleDataFileAllSignals3.db",
+            "Hits": [
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 37.81936073303223,
+                    "StartTime": 35.80622589588165
+                },
+                {
+                    "Description": "WOTLaunchFromRest",
+                    "EndTime": 39.58238410949707,
+                    "StartTime": 38.056864619255066
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 39.94499200582504,
+                    "StartTime": 37.931904673576355
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 48.49747771024704,
+                    "StartTime": 46.48445624113083
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 64.15206372737885,
+                    "StartTime": 62.13895493745804
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 69.85369628667831,
+                    "StartTime": 67.84061795473099
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 93.73570901155472,
+                    "StartTime": 91.72255426645279
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 112.39117908477783,
+                    "StartTime": 110.37800943851471
+                },
+                {
+                    "Description": "TipOutUpshifts",
+                    "EndTime": 132.87205201387405,
+                    "StartTime": 130.89648991823196
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 217.32143312692642,
+                    "StartTime": 215.30828231573105
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 234.77647829055786,
+                    "StartTime": 232.76328444480896
+                },
+                {
+                    "Description": "TipOutUpshifts",
+                    "EndTime": 273.65018343925476,
+                    "StartTime": 270.99939572811127
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 283.9406780600548,
+                    "StartTime": 281.92749440670013
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 370.2904369831085,
+                    "StartTime": 368.27743768692017
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 422.6555200815201,
+                    "StartTime": 420.64242964982986
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 470.19419699907303,
+                    "StartTime": 468.1810454130173
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 513.7566492557526,
+                    "StartTime": 511.7435157895088
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 537.5128461718559,
+                    "StartTime": 535.4996817708015
+                },
+                {
+                    "Description": "TipOutUpshifts",
+                    "EndTime": 549.628805398941,
+                    "StartTime": 545.8401907682419
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 593.1545251011848,
+                    "StartTime": 591.141439139843
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 619.3370268344879,
+                    "StartTime": 617.3238800764084
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 627.4642513990402,
+                    "StartTime": 625.4512989521027
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 644.793679356575,
+                    "StartTime": 642.7805349826813
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 679.2788456082344,
+                    "StartTime": 677.2656090259552
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 743.72284501791,
+                    "StartTime": 741.7097282409668
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 759.8275154829025,
+                    "StartTime": 757.8144155740738
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 770.3554980158806,
+                    "StartTime": 768.3424119353294
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 786.0100272297859,
+                    "StartTime": 783.9969446659088
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 801.3394746184349,
+                    "StartTime": 799.3262809514999
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 873.3352127671242,
+                    "StartTime": 871.322128534317
+                }
+            ]
+        }
+    ],
+    "SpacingBetweenHitsInOuputFile": 1
+}
