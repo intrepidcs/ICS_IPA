@@ -133,16 +133,16 @@ DSRFilename = "FindInFiles_" + ReportGenTimeStamp + ".dsr"
 #------------------------------------------------------------------------------------------------------------------
 
 # now combine the signal list and hit list to a new JSON file and output to an mdf file
+dsr.save(DSRFilename)
 SignalListWithHitList = {"SpacingBetweenHitsInOuputFile" : 1}
-SignalListWithHitList.update(config)
-SignalListWithHitList.update(dsr.dsr)#["HitList"])suggestiong from Zaid
-OutputJSONFileNameAndPath = os.getcwd() + "\OutputHitList_" + ReportGenTimeStamp + ".json"
+SignalListWithHitList["Channels"] = config["OutputChannels"]
+SignalListWithHitList["HitList"] = dsr.dsr["HitList"]
+OutputJSONFileNameAndPath = os.path.join(os.getcwd(), "OutputHitList_" + ReportGenTimeStamp + ".json")
 with open(OutputJSONFileNameAndPath, 'w') as outfile:
 	json.dump(SignalListWithHitList, outfile, sort_keys=True, indent=4)
-MDFOutputFileNameAndPath = os.getcwd() + "\MDFSubset_" + ReportGenTimeStamp + ".mf4"
+MDFOutputFileNameAndPath = os.path.join(os.getcwd(),"MDFSubset_" + ReportGenTimeStamp + ".mf4")
 
 OutputHitsResult = icsFI.OutputHitsToFile(OutputJSONFileNameAndPath, MDFOutputFileNameAndPath)
 
 log.info("Good Bye")
 
-dsr.save(DSRFilename)
