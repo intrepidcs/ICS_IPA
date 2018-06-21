@@ -13,7 +13,6 @@ from ICS_IPA import DSRTools as icsDSR
 from ICS_IPA import IPAInterfaceLibrary
 from  SigEnumFile import Sig 
 
-
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 handler = logging.FileHandler('IPA.log')
@@ -130,7 +129,7 @@ for dbFilePath in dbFilePaths:
  
 #------------------------------------------------------------------------------------------------------------------
 ReportGenTimeStamp = datetime.datetime.now().strftime("%m-%d-%y_%H-%M-%S")
-DSRFilename = "FindInFiles_" + ReportGenTimeStamp + ".dsr" 
+DSRFilename = "./FindInFiles_" + ReportGenTimeStamp + ".dsr" 
 #------------------------------------------------------------------------------------------------------------------
 log.info("Good Bye")
 
