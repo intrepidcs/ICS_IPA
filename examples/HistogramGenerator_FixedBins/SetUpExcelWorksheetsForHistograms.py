@@ -1,7 +1,6 @@
 import datetime
 import xlsxwriter
 import os
-from SigEnumFile import Sig
 from ICS_IPA import IPAInterfaceLibrary
 
 class ExcelHistogramReport:
@@ -15,7 +14,6 @@ class ExcelHistogramReport:
     def add_sig_worksheet(self, sig_info, hist):
         sig_name = sig_info["OptionalList"][0]["channel_name"]
         sig_script_name = sig_info["name_in_script"]
-        sig_num = getattr(Sig, sig_script_name)
         bins = sig_info['bins']
 
         #  Create a workbook + worksheet, insert our data

@@ -1,4 +1,5 @@
 {
+	"SignalListForUseInTimeBasis": ["TransOutputSpeed"],
 	"Channels": 
 	[{
 		"name_in_script": "TransOutputSpeed",

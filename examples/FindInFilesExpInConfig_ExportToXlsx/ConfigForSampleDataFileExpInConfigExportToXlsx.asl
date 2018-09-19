@@ -1,4 +1,5 @@
 {
+	"MaxNumberOfRowsInExcelFile" : 100000,
 	"SignalListForUseInTimeBasis": ["TransOutputSpeed"],
 	"Channels": [{
 		"name_in_script": "TransOutputSpeed",

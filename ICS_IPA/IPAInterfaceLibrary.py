@@ -28,7 +28,14 @@ def get_input_file_list(autoConvertToDB = False):
             root.withdraw()
             root.focus_force()
             root.wm_attributes('-topmost', 1)
-            filenames = list(filedialog.askopenfilenames(filetypes = (("Data files", "*.dat;*.log;*.mdf;*.mf4;*.db"), ("All files", "*.*"))))
+
+            options = {}
+            #options['initialdir'] = '{0}'.format(os.path.expanduser('~'))
+            options['filetypes'] = [("Data files", "*.dat;*.log;*.mdf;*.mf4;*.db"), ('all files', '.*')]
+            options['title'] = 'Select list of input data files and click open.'
+            options['defaultextension'] = '.db'
+            #filenames = tkFileDialog.askopenfilenames(parent=self.parent, **options)
+            filenames = list(filedialog.askopenfilenames(**options))
         if autoConvertToDB and len(filenames) > 0:
             for idx, file_name in enumerate(filenames):
                 selected_file = file_name
@@ -50,7 +57,7 @@ def get_config_file():
         root.withdraw()
         root.focus_force()
         root.wm_attributes('-topmost', 1)
-        fileName = filedialog.askopenfilename(filetypes = (("Lookup files", "*.sl;*.asl"), ("Signal Lookup files", "*.sl"),  ("Aliased Signal Lookup files", "*.asl"), ("All files", "*.*")))
+        fileName = filedialog.askopenfilename(filetypes = (("Lookup files", "*.sl;*.asl"), ("Signal Lookup files", "*.sl"),  ("Aliased Signal Lookup files", "*.asl"), ("All files", "*.*")), title ="Select script config file (*.als) and click open.")
         return fileName
 
 def get_config_data():

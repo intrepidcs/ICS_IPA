@@ -1,4 +1,5 @@
 {
+	"SignalListForUseInTimeBasis": ["TransOutputSpeed"],
 	"_commentChannels": "The Channels shown below are a list of channels used for opening and searching through data files",
 	"Channels": [{
 		"name_in_script": "TransOutputSpeed",
