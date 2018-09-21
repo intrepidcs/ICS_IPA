@@ -1,6 +1,6 @@
 from setuptools import setup
 
-version = '0.0.4.1'
+version = '0.0.4.2'
 
 setup(
 	name = 'ICS_IPA',
@@ -13,7 +13,7 @@ setup(
 	url = 'https://github.com/intrepidcs/ICS_IPA',
 	download_url = 'https://github.com/intrepidcs/ICS_IPA/archive/'+ version + '.tar.gz',
 	package=['DataFileIOLibrary'],
-	package_data = {'DataFileIOLibrary': ['ICS_IPA/_DataFileIOLibraryInterface.pyd']},
+	package_data = {'DataFileIOLibrary': ['ICS_IPA/_DataFileIOLibraryInterface.pyd', 'ICS_IPA/_DataFileIOLibraryInterface.so']},
 	include_package_data=True,
 	classifiers = ['Operating System :: Microsoft :: Windows',
 				'Programming Language :: Python',
