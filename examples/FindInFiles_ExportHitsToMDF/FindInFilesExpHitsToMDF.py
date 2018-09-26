@@ -121,9 +121,11 @@ for dbFilePath in dbFilePaths:
 			curTimestamp = data.JumpBeforeTimestamp(0)
 			dataPoints = data.GetPoints()
 			dataPointsPrev = dataPoints.copy()
+			#initialize Event State Parameters before analyzing each file
+			Events.initializeEventParmsForNewDataFile()
 
-			#initialize event based arrays
 			RecordIncludesExpressionEndEvent = False
+			#loop through each record of each file
 			while curTimestamp != sys.float_info.max:
 				CurrentRecordHasBeenAdded = False
 				for i in range(Events.NumberOfEvents):

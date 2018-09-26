@@ -134,9 +134,10 @@ for dbFilePath in dbFilePaths:
 			curTimestamp = data.JumpBeforeTimestamp(0)
 			dataPoints = data.GetPoints()
 			dataPointsPrev = dataPoints.copy()
-
-			#initialize event based arrays
+			#initialize Event State Parameters before analyzing each file
+			Events.initializeEventParmsForNewDataFile()
 			RecordIncludesExpressionEndEvent = False
+			#loop through each record in each file
 			while curTimestamp != sys.float_info.max and (rownumber < MaxNumberOfRowsInExcelFile):
 				CurrentRecordHasBeenAdded = False
 				for i in range(Events.NumberOfEvents):
