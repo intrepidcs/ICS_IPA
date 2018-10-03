@@ -27,7 +27,7 @@
 ##########################################################################################################################################################################################################################################
 #	Script Outputs:
 #		The script outputs a dsr file which stands for DataSpyReport. This file is a json file that lists all of occurrances of events found in the input data file set. 
-#		The output filename starts wtih FindInFiles_ followed by a timestamp with the time ths report was created ie: FindInFiles_09-05-18_11-24-32.dsr
+#		The output filename starts wtih FindInFiles_ followed by a timestamp with the time this report was created ie: FindInFiles_09-05-18_11-24-32.dsr
 ##########################################################################################################################################################################################################################################
 
 import numpy as np
@@ -112,9 +112,10 @@ for dbFilePath in dbFilePaths:
 			curTimestamp = data.JumpBeforeTimestamp(0)
 			dataPoints = data.GetPoints()
 			dataPointsPrev = dataPoints.copy()
-
-			#initialize event based arrays
+			#initialize Event State Parameters before analyzing each file
+			Events.initializeEventParmsForNewDataFile()
 			RecordIncludesExpressionEndEvent = False
+			#now loop through all records in the current file
 			while curTimestamp != sys.float_info.max:
 				CurrentRecordHasBeenAdded = False
 				for i in range(Events.NumberOfEvents):
