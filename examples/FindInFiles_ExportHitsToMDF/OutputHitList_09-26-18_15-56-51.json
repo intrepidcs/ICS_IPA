@@ -1,0 +1,817 @@
+{
+    "Channels": [
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "TransmissionEff",
+                    "message_name": "Group0001",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "TransmissionEff"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EnginePower",
+                    "message_name": "Group0002",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EnginePower"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "KnockSensorMag",
+                    "message_name": "Group0003",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "KnockSensorMag"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "O2_DownstreamTrim1",
+                    "message_name": "Group0004",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "O2_DownstreamTrim1"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "PurgeFlow",
+                    "message_name": "Group0005",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "PurgeFlow"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "O2SensorTrimFactor",
+                    "message_name": "Group0006",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "O2SensorTrimFactor"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "ExhValvePosition",
+                    "message_name": "Group0007",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "ExhValvePosition"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "IntakeValvePosition",
+                    "message_name": "Group0008",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "IntakeValvePosition"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EGRValvePos",
+                    "message_name": "Group0009",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EGRValvePos"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "AccessVolt_LowVoltage",
+                    "message_name": "Group0010",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "AccessVolt_LowVoltage"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EngineStateVariable1",
+                    "message_name": "Group0010",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EngineStateVariable1"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "IntakeManifoldPressure",
+                    "message_name": "Group0010",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "IntakeManifoldPressure"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "VehSpeed",
+                    "message_name": "Group0010",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "VehSpeed"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "TransOutputSpeed",
+                    "message_name": "Group0011",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "TransOutputSpeed"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "TransTurbineSpeed",
+                    "message_name": "Group0012",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "TransTurbineSpeed"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EngineSpeed",
+                    "message_name": "Group0013",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EngineSpeed"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "IntakeAirTemp",
+                    "message_name": "Group0014",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "IntakeAirTemp"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "SpkAdvance",
+                    "message_name": "Group0015",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "SpkAdvance"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "ExhTemp",
+                    "message_name": "Group0016",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "ExhTemp"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "CatalystTemp",
+                    "message_name": "Group0017",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "CatalystTemp"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "TargetIdleSpeed_DR",
+                    "message_name": "Group0018",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "TargetIdleSpeed_DR"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "TargetIdleSpeed_PN",
+                    "message_name": "Group0019",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "TargetIdleSpeed_PN"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "AccelPedalPosition",
+                    "message_name": "Group0020",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "AccelPedalPosition"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "OutputSpeedAccel",
+                    "message_name": "Group0021",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "OutputSpeedAccel"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EngineTorqReq",
+                    "message_name": "Group0022",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EngineTorqReq"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EngineTorqRaw",
+                    "message_name": "Group0023",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EngineTorqRaw"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EngineTorqMin_WithoutAccess",
+                    "message_name": "Group0024",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EngineTorqMin_WithoutAccess"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EngineTorqMin_LimpHome",
+                    "message_name": "Group0025",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EngineTorqMin_LimpHome"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EngineTorqMin_Curr",
+                    "message_name": "Group0026",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EngineTorqMin_Curr"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EngineTorqMax_WithoutAccess",
+                    "message_name": "Group0027",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EngineTorqMax_WithoutAccess"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EngineTorqMax_SlowPath",
+                    "message_name": "Group0028",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EngineTorqMax_SlowPath"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EngineTorqMax_LimpHome",
+                    "message_name": "Group0029",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EngineTorqMax_LimpHome"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EngineTorqMax_FastPath",
+                    "message_name": "Group0030",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EngineTorqMax_FastPath"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EngineTorqMax_Cur",
+                    "message_name": "Group0031",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EngineTorqMax_Cur"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EngineTorq_ReqNet",
+                    "message_name": "Group0032",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EngineTorq_ReqNet"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EngineSpeedTargetAccel",
+                    "message_name": "Group0033",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EngineSpeedTargetAccel"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "BatMinTemp",
+                    "message_name": "Group0034",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "BatMinTemp"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EngineCoolantTemp",
+                    "message_name": "Group0034",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EngineCoolantTemp"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "BatMaxTemp",
+                    "message_name": "Group0034",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "BatMaxTemp"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "BatTempActual",
+                    "message_name": "Group0034",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "BatTempActual"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EngineStateVariable5",
+                    "message_name": "Group0035",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EngineStateVariable5"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "TorqueConverterSpeedRatio",
+                    "message_name": "Group0035",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "TorqueConverterSpeedRatio"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "TorqConv_Pressure",
+                    "message_name": "Group0036",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "TorqConv_Pressure"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EngineStateVariable3",
+                    "message_name": "Group0037",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EngineStateVariable3"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EngineStateVariable7",
+                    "message_name": "Group0037",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EngineStateVariable7"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "AccessVolt_Actual",
+                    "message_name": "Group0038",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "AccessVolt_Actual"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "BrakePedalPosition",
+                    "message_name": "Group0038",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "BrakePedalPosition"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EngineStateVariable4",
+                    "message_name": "Group0038",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EngineStateVariable4"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "EngineStateVariable6",
+                    "message_name": "Group0038",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "EngineStateVariable6"
+        },
+        {
+            "OptionalList": [
+                {
+                    "channel_name": "AccessVolt_Setpoint",
+                    "message_name": "Group0039",
+                    "network_name": ""
+                }
+            ],
+            "name_in_script": "AccessVolt_Setpoint"
+        }
+    ],
+    "HitList": [
+        {
+            "FilenameAndPath": "C:/Jmitchell/DataSpy/SourceCode/ICS_IPA_FORK/SampleDataFiles_1/DataSpySampleDataFileAllSignals1.db",
+            "Hits": [
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 37.82153671979904,
+                    "StartTime": 35.79601788520813
+                },
+                {
+                    "Description": "WOTLaunchFromRest",
+                    "EndTime": 39.59716808795929,
+                    "StartTime": 38.07166463136673
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 39.94723200798035,
+                    "StartTime": 37.92163264751434
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 48.49987769126892,
+                    "StartTime": 46.474216282367706
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 64.1542557477951,
+                    "StartTime": 62.128730952739716
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 69.85596829652786,
+                    "StartTime": 67.83048993349075
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 93.73801302909851,
+                    "StartTime": 91.71231424808502
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 112.39353108406067,
+                    "StartTime": 110.36784940958023
+                },
+                {
+                    "Description": "TipOutUpshifts",
+                    "EndTime": 132.8742759823799,
+                    "StartTime": 130.89882594347
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 217.32372111082077,
+                    "StartTime": 215.29817032814026
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 234.778782248497,
+                    "StartTime": 232.75317251682281
+                },
+                {
+                    "Description": "TipOutUpshifts",
+                    "EndTime": 273.66490346193314,
+                    "StartTime": 271.01430773735046
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 283.9429820179939,
+                    "StartTime": 281.91738241910934
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 370.29270899295807,
+                    "StartTime": 368.2671176791191
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 422.6578561067581,
+                    "StartTime": 420.6321897506714
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 470.1965010166168,
+                    "StartTime": 468.17091739177704
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 513.7590492963791,
+                    "StartTime": 511.73333978652954
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 537.515230178833,
+                    "StartTime": 535.4894738197327
+                },
+                {
+                    "Description": "TipOutUpshifts",
+                    "EndTime": 549.6436533927917,
+                    "StartTime": 545.8425427675247
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 593.1568931341171,
+                    "StartTime": 591.1312311887741
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 619.3392988443375,
+                    "StartTime": 617.3137201070786
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 627.4664912223816,
+                    "StartTime": 625.4410429596901
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 644.7960633635521,
+                    "StartTime": 642.770358979702
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 679.2812457680702,
+                    "StartTime": 677.2554323673248
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 743.7253090143204,
+                    "StartTime": 741.6995842456818
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 759.8298354744911,
+                    "StartTime": 757.8041436076164
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 770.3578340411186,
+                    "StartTime": 768.3322359323502
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 786.0123472213745,
+                    "StartTime": 783.9867366552353
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 801.3418745994568,
+                    "StartTime": 799.3162329792976
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 873.3375808000565,
+                    "StartTime": 871.3120485544205
+                }
+            ]
+        },
+        {
+            "FilenameAndPath": "C:/Jmitchell/DataSpy/SourceCode/ICS_IPA_FORK/SampleDataFiles_1/DataSpySampleDataFileAllSignals2.db",
+            "Hits": [
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 37.82153671979904,
+                    "StartTime": 35.79601788520813
+                },
+                {
+                    "Description": "WOTLaunchFromRest",
+                    "EndTime": 39.59716808795929,
+                    "StartTime": 38.07166463136673
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 39.94723200798035,
+                    "StartTime": 37.92163264751434
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 48.49987769126892,
+                    "StartTime": 46.474216282367706
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 64.1542557477951,
+                    "StartTime": 62.128730952739716
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 69.85596829652786,
+                    "StartTime": 67.83048993349075
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 93.73801302909851,
+                    "StartTime": 91.71231424808502
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 112.39353108406067,
+                    "StartTime": 110.36784940958023
+                },
+                {
+                    "Description": "TipOutUpshifts",
+                    "EndTime": 132.8742759823799,
+                    "StartTime": 130.89882594347
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 217.32372111082077,
+                    "StartTime": 215.29817032814026
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 234.778782248497,
+                    "StartTime": 232.75317251682281
+                },
+                {
+                    "Description": "TipOutUpshifts",
+                    "EndTime": 273.66490346193314,
+                    "StartTime": 271.01430773735046
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 283.9429820179939,
+                    "StartTime": 281.91738241910934
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 370.29270899295807,
+                    "StartTime": 368.2671176791191
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 422.6578561067581,
+                    "StartTime": 420.6321897506714
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 470.1965010166168,
+                    "StartTime": 468.17091739177704
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 513.7590492963791,
+                    "StartTime": 511.73333978652954
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 537.515230178833,
+                    "StartTime": 535.4894738197327
+                },
+                {
+                    "Description": "TipOutUpshifts",
+                    "EndTime": 549.6436533927917,
+                    "StartTime": 545.8425427675247
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 593.1568931341171,
+                    "StartTime": 591.1312311887741
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 619.3392988443375,
+                    "StartTime": 617.3137201070786
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 627.4664912223816,
+                    "StartTime": 625.4410429596901
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 644.7960633635521,
+                    "StartTime": 642.770358979702
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 679.2812457680702,
+                    "StartTime": 677.2554323673248
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 743.7253090143204,
+                    "StartTime": 741.6995842456818
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 759.8298354744911,
+                    "StartTime": 757.8041436076164
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 770.3578340411186,
+                    "StartTime": 768.3322359323502
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 786.0123472213745,
+                    "StartTime": 783.9867366552353
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 801.3418745994568,
+                    "StartTime": 799.3162329792976
+                },
+                {
+                    "Description": "EngineStateVariableChangeFrom9To10",
+                    "EndTime": 873.3375808000565,
+                    "StartTime": 871.3120485544205
+                }
+            ]
+        }
+    ],
+    "SpacingBetweenHitsInOuputFile": 1
+}
