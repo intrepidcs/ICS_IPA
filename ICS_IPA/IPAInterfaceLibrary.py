@@ -14,7 +14,9 @@ def get_input_file_list(autoConvertToDB = False):
     if is_wivi:
         if len(sys.argv) > 1:
             input = json.load(open(sys.argv[1]))
-            return input["files"]
+            if 'files' in input:
+                return input["files"]
+            return input['data_files']
         else:
             return None
     else:
@@ -50,6 +52,11 @@ def get_config_file():
     if is_wivi:
         if len(sys.argv) > 2:
             return sys.argv[2]
+        elif len(sys.argv) > 1:
+            input = json.load(open(sys.argv[1]))
+            if 'config_files' in input and len(input['config_files']) > 1:
+                return input['config_files'][0]
+            return None
         else:
             return None
     else:
@@ -68,6 +75,10 @@ def get_config_data():
         return None
 def get_output_path():
     if is_wivi:
+        if len(sys.argv) > 1:
+            input = json.load(open(sys.argv[1]))
+            if 'output_dir' in input:
+                return input['output_dir']
         return os.getcwd()
     else:
         if len(sys.argv) > 1:
