@@ -38,7 +38,7 @@
 	}],
 	"EventDefinitions": [{
 		"Description": "WOTLaunchFromRest",
-		"StartExpression": "(AccelPedalPosition > 80) and (TransOutputSpeed < 100)",
+		"StartExpression": "(TransOutputSpeed > 80) and (TransOutputSpeed < 100)",
 		"EndExpression": "(AccelPedalPosition < 50) or (TransOutputSpeed > 1000)"
 	},{
 		"Description": "TipOutUpshifts",
