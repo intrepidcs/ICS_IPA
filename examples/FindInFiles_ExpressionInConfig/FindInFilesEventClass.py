@@ -49,7 +49,10 @@ class FindInFilesEvents:
 
 			#tokenize the start expression
 			self.StartExpressionTokensAreInWhiteList[i] = True
-			self.TokensInStartExpression[i] = TreebankWordTokenizer().tokenize(self.StartExpression[i])
+			ExpressionString = str(self.StartExpression[i])
+			#put spaces around any inequality characters to improve output of tokenizer on strings without spaces
+			ExpressionString = self.InsertSpacesAroundOperatorsToImproveTokenizerPerformance(ExpressionString)
+			self.TokensInStartExpression[i] = TreebankWordTokenizer().tokenize(ExpressionString)
 			for Token in self.TokensInStartExpression[i]:
 				if not(self.ExpressionTokenWhiteListChecker.IsTokenInWhiteList(Token)):
 					self.StartExpressionTokensAreInWhiteList[i] = False
@@ -63,7 +66,10 @@ class FindInFilesEvents:
 				self.StartExpressionFormattedForEval[i] = re.sub(PrevRecSig, 'dataPointsPrev[' + str(self.Sig_list.index(PrevRecSig[6-len(PrevRecSig):])) + ']', self.StartExpressionFormattedForEval[i], count=1)
 
 			#now tokenize the end expression
-			self.TokensInEndExpression[i] = TreebankWordTokenizer().tokenize(self.EndExpression[i])
+			ExpressionString = str(self.EndExpression[i])
+			#put spaces around any inequality characters to improve output of tokenizer on strings without spaces
+			ExpressionString = self.InsertSpacesAroundOperatorsToImproveTokenizerPerformance(ExpressionString)
+			self.TokensInEndExpression[i] = TreebankWordTokenizer().tokenize(ExpressionString)
 			self.EndExpressionTokensAreInWhiteList[i] = True
 			for Token in self.TokensInEndExpression[i]:
 				if not(self.ExpressionTokenWhiteListChecker.IsTokenInWhiteList(Token)):
@@ -86,3 +92,29 @@ class FindInFilesEvents:
 			self.SearchExpEndTime[i] = 0.0
 			self.TimeFromExpressionStart[i] = 0.0
 
+	def InsertSpacesAroundOperatorsToImproveTokenizerPerformance(self, InputString):
+		OutputString = str(InputString)
+		OutputString = re.sub('\(', ' ( ', OutputString)
+		OutputString = re.sub('\)', ' ) ', OutputString)
+		OutputString = re.sub('<=', ' <= ', OutputString)
+		OutputString = re.sub('>=', ' >= ', OutputString)
+		OutputString = re.sub('<>', ' <> ', OutputString)
+		OutputString = re.sub('<=', ' <= ', OutputString)
+		OutputString = re.sub('!=', ' != ', OutputString)
+		OutputString = re.sub('==', ' == ', OutputString)
+		OutputString = re.sub('<', ' < ', OutputString)
+		OutputString = re.sub('< =', '<=', OutputString)
+		OutputString = re.sub('>', ' > ', OutputString)
+		OutputString = re.sub('> =', '>=', OutputString)		
+		OutputString = re.sub('!', ' ! ', OutputString)
+		OutputString = re.sub('! =', '!=', OutputString)
+		OutputString = re.sub(',', ' , ', OutputString)
+		OutputString = re.sub('\+', ' + ', OutputString)
+		OutputString = re.sub('-', ' - ', OutputString)
+		OutputString = re.sub('\*', ' * ', OutputString)
+		OutputString = re.sub('/', ' / ', OutputString)
+		OutputString = re.sub('%', ' % ', OutputString)
+		OutputString = re.sub('&', ' & ', OutputString)
+		OutputString = re.sub('\|', ' | ', OutputString)
+		OutputString = re.sub('\^', ' ^ ', OutputString)
+		return OutputString

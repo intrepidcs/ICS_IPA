@@ -6,10 +6,13 @@ class CheckEvalExpression:
 			'and', \
 			'or',  \
 			'not', \
+			'abs', \
 			'(',   \
 			')',   \
 			'==',  \
+			'=',   \
 			'!=',  \
+			'!',   \
 			'<>',  \
 			'>',   \
 			'>=',  \
@@ -26,6 +29,7 @@ class CheckEvalExpression:
 			'%',   \
 			'&',   \
 			'|',   \
+			'^',   \
 			'TimeFromExpStart'}
 
 	def IsTokenInWhiteList(self, token):
