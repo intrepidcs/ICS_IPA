@@ -24,9 +24,9 @@ handler.setFormatter(formatter)
 log.addHandler(handler)
 log.info("Hello")
 
-#------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------------
 dsr = icsDSR.DSRFile()
-#there are multiple methods to save to a dsr file.
+# there are multiple methods to save to a dsr file.
 
 for dbFilePath in dbFilePaths:
 	try :
@@ -45,7 +45,7 @@ for dbFilePath in dbFilePaths:
 	except ValueError as e :
 		print(str(e))
  
-#------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------------
 
 for dbFilePath in dbFilePaths:
 	try :
@@ -53,11 +53,11 @@ for dbFilePath in dbFilePaths:
 
 			accelpedalPostionIndex = data.indexOfSignal("AccelPedalPosition")
 			transOutputSpeedIndex = data.indexOfSignal("TransOutputSpeed")
-			#the first is using lambdas, you can think of lambdas as functions without a name 
-			#the following lambda has two parameters v and t. v for values and t for time
-			#the AddToDSR function takes a function with two paramaters as an argument
-			#The AddToDSR calls the function for every data point it iterates though to determan if it should be included in the DSR file
-			#The following two calls do the same thing in two diffrent ways the first uses a lambda
+			# using lambdas, you can think of lambdas as functions without a name 
+			# the following lambda has two parameters v and t. v for values and t for time
+			# the AddToDSR function takes a function with two paramaters as an argument
+			# The AddToDSR calls the function for every data point it iterates though to determan if it should be included in the DSR file
+			# The following two calls do the same thing in two diffrent ways the first uses a lambda
 
 			dsr.Add(data, lambda v, t: v[accelpedalPostionIndex] > 80 and v[transOutputSpeedIndex] < 1600)
 	except ValueError as e :
@@ -89,7 +89,7 @@ for dbFilePath in dbFilePaths:
 		print(str(e))
 
 #------------------------------------------------------------------------------------------------------------------
-#The second simply passes a function
+# simply passes a function
 class Sig:
 	TransOutputSpeed = 0
 	AccelPedalPosition = -1 
@@ -105,14 +105,14 @@ for dbFilePath in dbFilePaths:
 
 	except ValueError as e :
 		print(str(e))
-#------------------------------------------------------------------------------------------------------------------
-#The Third method uses a class
+# ------------------------------------------------------------------------------------------------------------------
+# using a class
 class dataCheck:
 	def __init__(self):
 		self.AccelPedalPositionMax = 80
 		self.TransOutputSpeedMin = 1600
 
-	def __call__(self, values, timestamp): #this is the required callback function for the class
+	def __call__(self, values, timestamp): # this is the required callback function for the class
 		return values[Sig.AccelPedalPosition] > self.AccelPedalPositionMax and values[Sig.TransOutputSpeed] < self.TransOutputSpeedMin
 
 dc = dataCheck()
@@ -123,15 +123,15 @@ for dbFilePath in dbFilePaths:
 	except ValueError as e :
 		print(str(e))
 
-#------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------------
 
-#The Third method uses a class
+# uses a class
 class AdvancedDataCheck:
 	def __init__(self):
 		self.previousAccelPedalPosition = None
 		self.TransOutputSpeedMin = 1600
 
-	def __call__(self, values, timestamp): #this is the required callback function for the class
+	def __call__(self, values, timestamp): # this is the required callback function for the class
 		if self.previousAccelPedalPosition is None:
 			self.previousAccelPedalPosition = values[Sig.AccelPedalPosition]
 			return 
@@ -145,5 +145,5 @@ for dbFilePath in dbFilePaths:
 	except ValueError as e :
 		print(str(e))
 
-#------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------------------
 dsr.save("test.dsr")
