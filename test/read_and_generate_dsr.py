@@ -49,24 +49,6 @@ for dbFilePath in dbFilePaths:
  
 # ------------------------------------------------------------------------------------------------------------------
 
-# the callback method 
-for dbFilePath in dbFilePaths:
-	try :
-		with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
-
-			accelpedalPostionIndex = data.indexOfSignal("AccelPedalPosition")
-			transOutputSpeedIndex = data.indexOfSignal("TransOutputSpeed")
-			# using lambdas, you can think of lambdas as functions without a name 
-			# the following lambda has two parameters v and t. v for values and t for time
-			# the AddToDSR function takes a function with two paramaters as an argument
-			# The AddToDSR calls the function for every data point it iterates though to determan if it should be included in the DSR file
-			# The following two calls do the same thing in two diffrent ways the first uses a lambda
-
-			dsr.Add(data, lambda v, t: v[accelpedalPostionIndex] > 80 and v[transOutputSpeedIndex] < 1600)
-	except ValueError as e :
-		print(str(e))
-#------------------------------------------------------------------------------------------------------------------
-
 # the i'll do everything method 
 
 for dbFilePath in dbFilePaths:
@@ -94,6 +76,25 @@ for dbFilePath in dbFilePaths:
 		print(str(e))
 
 #------------------------------------------------------------------------------------------------------------------
+
+# the lamda method 
+for dbFilePath in dbFilePaths:
+	try :
+		with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
+
+			accelpedalPostionIndex = data.indexOfSignal("AccelPedalPosition")
+			transOutputSpeedIndex = data.indexOfSignal("TransOutputSpeed")
+			# using lambdas, you can think of lambdas as functions without a name 
+			# the following lambda has two parameters v and t. v for values and t for time
+			# the AddToDSR function takes a function with two paramaters as an argument
+			# The AddToDSR calls the function for every data point it iterates though to determan if it should be included in the DSR file
+			# The following two calls do the same thing in two diffrent ways the first uses a lambda
+
+			dsr.Add(data, lambda v, t: v[accelpedalPostionIndex] > 80 and v[transOutputSpeedIndex] < 1600)
+	except ValueError as e :
+		print(str(e))
+#------------------------------------------------------------------------------------------------------------------
+
 # simply passes a function
 class Sig:
 	TransOutputSpeed = 0
