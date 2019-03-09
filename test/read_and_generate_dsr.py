@@ -28,6 +28,8 @@ log.info("Hello")
 dsr = icsDSR.DSRFile()
 # there are multiple methods to save to a dsr file.
 
+# the loop method 
+
 for dbFilePath in dbFilePaths:
 	try :
 		with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
@@ -47,6 +49,7 @@ for dbFilePath in dbFilePaths:
  
 # ------------------------------------------------------------------------------------------------------------------
 
+# the callback method 
 for dbFilePath in dbFilePaths:
 	try :
 		with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
@@ -63,6 +66,8 @@ for dbFilePath in dbFilePaths:
 	except ValueError as e :
 		print(str(e))
 #------------------------------------------------------------------------------------------------------------------
+
+# the i'll do everything method 
 
 for dbFilePath in dbFilePaths:
 	try :
@@ -108,39 +113,44 @@ for dbFilePath in dbFilePaths:
 # ------------------------------------------------------------------------------------------------------------------
 # using a class
 class dataCheck:
-	def __init__(self):
+	def __init__(self, data):
+		self.AccelPedalPositionIndex = data.indexOfSignal("AccelPedalPosition")
+		self.TransOutputSpeedIndex = data.indexOfSignal("TransOutputSpeed")
 		self.AccelPedalPositionMax = 80
 		self.TransOutputSpeedMin = 1600
 
 	def __call__(self, values, timestamp): # this is the required callback function for the class
-		return values[Sig.AccelPedalPosition] > self.AccelPedalPositionMax and values[Sig.TransOutputSpeed] < self.TransOutputSpeedMin
+		return values[self.AccelPedalPositionIndex] > self.AccelPedalPositionMax and values[self.TransOutputSpeedIndex] < self.TransOutputSpeedMin
 
-dc = dataCheck()
+
 for dbFilePath in dbFilePaths:
 	try :
 		with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:		
+			dc = dataCheck(data)
 			dsr.Add(data, dc, hitDiscretion = "Class Example hit")
 	except ValueError as e :
 		print(str(e))
 
 # ------------------------------------------------------------------------------------------------------------------
 
-# uses a class
+# uses a class inwich the starting point of the file is used as max trigger
 class AdvancedDataCheck:
-	def __init__(self):
+	def __init__(self, data):
+		self.AccelPedalPositionIndex = data.indexOfSignal("AccelPedalPosition")
+		self.TransOutputSpeedIndex = data.indexOfSignal("TransOutputSpeed")
 		self.previousAccelPedalPosition = None
 		self.TransOutputSpeedMin = 1600
 
 	def __call__(self, values, timestamp): # this is the required callback function for the class
 		if self.previousAccelPedalPosition is None:
-			self.previousAccelPedalPosition = values[Sig.AccelPedalPosition]
-			return 
-		return values[Sig.AccelPedalPosition] > self.AccelPedalPositionMax and values[Sig.TransOutputSpeed] < self.TransOutputSpeedMin
+			self.previousAccelPedalPosition = values[self.AccelPedalPositionIndex]
+			return true
+		return values[self.AccelPedalPositionIndex] > self.AccelPedalPositionMax and values[self.TransOutputSpeedIndex] < self.TransOutputSpeedMin
 
-dc = dataCheck()
 for dbFilePath in dbFilePaths:
 	try :
 		with icsFI.ICSDataFile(dbFilePath, slFilePath) as data:
+			dc = AdvancedDataCheck(data)
 			dsr.Add(data, dc, hitDiscretion = "Class Example hit")
 	except ValueError as e :
 		print(str(e))
