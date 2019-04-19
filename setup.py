@@ -1,18 +1,51 @@
 from setuptools import setup
-import shutil
+import os
+import sys
 import platform
+import errno
 
-version = '0.4.11'
+version = '0.4.12'
+py_major = sys.version_info[0]
+py_minor = sys.version_info[1]
+
+
+def symlink_force(target, link_name):
+    try:
+        os.symlink(target, link_name)
+    except OSError as e:
+        if e.errno == errno.EEXIST:
+            os.remove(link_name)
+            os.symlink(target, link_name)
+        else:
+            raise e
+
+if py_major is not 3:
+    raise "this module is a python 3 module only"
 
 print("seting up for " + platform.system() + " " + platform.architecture()[0] + " platform")
-if platform.system() == 'Windows' and platform.architecture()[0] == '32bit':
-    shutil.copy("./ICS_IPA/_DataFileIOLibraryInterface32.pyd", "./ICS_IPA/_DataFileIOLibraryInterface.pyd")
-elif platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
-    shutil.copy("./ICS_IPA/_DataFileIOLibraryInterface64.pyd", "./ICS_IPA/_DataFileIOLibraryInterface.pyd")
-elif platform.system() == 'Linux':
-    shutil.copy("./ICS_IPA/_DataFileIOLibraryInterface64.so", "./ICS_IPA/_DataFileIOLibraryInterface.so")
+if py_minor is 7:
+    if platform.system() == 'Windows' and platform.architecture()[0] == '32bit':
+        symlink_force("./ICS_IPA/_DataFileIOLibraryInterface-py3.7-v4.12-32.pyd", "./ICS_IPA/_DataFileIOLibraryInterface.pyd")
+    elif platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
+        symlink_force("./ICS_IPA/_DataFileIOLibraryInterface-py3.7-v4.12-64.pyd", "./ICS_IPA/_DataFileIOLibraryInterface.pyd")
+    else:
+        raise "Platform or python version is not supported"
+elif py_minor is 6:
+    if platform.system() == 'Windows' and platform.architecture()[0] == '32bit':
+        symlink_force("./ICS_IPA/_DataFileIOLibraryInterface-py3.6-v4.12-32.pyd", "./ICS_IPA/_DataFileIOLibraryInterface.pyd")
+    elif platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
+        symlink_force("./ICS_IPA/_DataFileIOLibraryInterface-py3.6-v4.12-64.pyd", "./ICS_IPA/_DataFileIOLibraryInterface.pyd")
+    elif platform.system() == 'Linux' and platform.architecture()[0] == '64bit':
+        symlink_force("./ICS_IPA/_DataFileIOLibraryInterface-py3.6-v4.12-64.so", "./ICS_IPA/_DataFileIOLibraryInterface.so")
+    else:
+        raise "Platform or python version is not supported"
+elif py_minor is 4:
+    if platform.system() == 'Linux' and platform.architecture()[0] == '64bit':
+        symlink_force("./ICS_IPA/_DataFileIOLibraryInterface-py3.4-v4.12-64.so", "./ICS_IPA/_DataFileIOLibraryInterface.so")
+    else:
+        raise "Platform or python version is not supported"
 else:
-    raise "Platform is not supported"
+    raise "python version is not supported"
 
 setup(
     name='ICS_IPA',
