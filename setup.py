@@ -4,7 +4,7 @@ import sys
 import platform
 import errno
 
-version = '0.4.12'
+version = '0.4.14'
 py_major = sys.version_info[0]
 py_minor = sys.version_info[1]
 
