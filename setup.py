@@ -1,16 +1,16 @@
 from setuptools import setup
-import os
+import shutil
 import platform
 
-version = '0.4.9'
+version = '0.4.10'
 
 print("seting up for " + platform.system() + " " + platform.architecture()[0] + " platform")
 if platform.system() == 'Windows' and platform.architecture()[0] == '32bit':
-    os.rename("./ICS_IPA/_DataFileIOLibraryInterface32.pyd", "./ICS_IPA/_DataFileIOLibraryInterface.pyd")
+    shutil.copy("./ICS_IPA/_DataFileIOLibraryInterface32.pyd", "./ICS_IPA/_DataFileIOLibraryInterface.pyd")
 elif platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
-    os.rename("./ICS_IPA/_DataFileIOLibraryInterface64.pyd", "./ICS_IPA/_DataFileIOLibraryInterface.pyd")
+    shutil.copy("./ICS_IPA/_DataFileIOLibraryInterface64.pyd", "./ICS_IPA/_DataFileIOLibraryInterface.pyd")
 elif platform.system() == 'Linux':
-    os.rename("./ICS_IPA/_DataFileIOLibraryInterface64.so", "./ICS_IPA/_DataFileIOLibraryInterface.so")
+    shutil.copy("./ICS_IPA/_DataFileIOLibraryInterface64.so", "./ICS_IPA/_DataFileIOLibraryInterface.so")
 else:
     raise "Platform is not supported"
 
