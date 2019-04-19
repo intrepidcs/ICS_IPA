@@ -2,7 +2,7 @@ from setuptools import setup
 import shutil
 import platform
 
-version = '0.4.10'
+version = '0.4.11'
 
 print("seting up for " + platform.system() + " " + platform.architecture()[0] + " platform")
 if platform.system() == 'Windows' and platform.architecture()[0] == '32bit':
