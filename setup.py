@@ -5,7 +5,7 @@ import sys
 import platform
 import errno
 
-version = '0.4.20'
+version = '0.4.21'
 
 def symlink_force(target, link_name):
     try:
@@ -23,7 +23,7 @@ def symlink_force(target, link_name):
 
 class PostInstallCommand(install):
     def run(self):
-
+        install.run(self)
         print("post install")
         py_major = sys.version_info[0]
         py_minor = sys.version_info[1]
@@ -55,8 +55,6 @@ class PostInstallCommand(install):
                 raise "Platform or python version is not supported"
         else:
             raise "python version is not supported"
-        
-        install.run(self)
 
 setup(
     name='ICS_IPA',
