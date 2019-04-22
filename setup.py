@@ -4,7 +4,7 @@ import sys
 import platform
 import errno
 
-version = '0.4.14'
+version = '0.4.17'
 py_major = sys.version_info[0]
 py_minor = sys.version_info[1]
 
@@ -70,9 +70,12 @@ setup(
                  version + '.tar.gz',
     package=['DataFileIOLibrary'],
     package_data={'DataFileIOLibrary':
-                  ['ICS_IPA/_DataFileIOLibraryInterface32.pyd',
-                   'ICS_IPA/_DataFileIOLibraryInterface64.pyd',
-                   'ICS_IPA/_DataFileIOLibraryInterface64.so']},
+                  ['ICS_IPA/_DataFileIOLibraryInterface-py3.6-v4.12-32.pyd',
+                   'ICS_IPA/_DataFileIOLibraryInterface-py3.6-v4.12-64.pyd',
+                   'ICS_IPA/_DataFileIOLibraryInterface-py3.6-v4.12-64.so',
+                   'ICS_IPA/_DataFileIOLibraryInterface-py3.7-v4.12-32.pyd',
+                   'ICS_IPA/_DataFileIOLibraryInterface-py3.7-v4.12-64.pyd',
+                   'ICS_IPA/_DataFileIOLibraryInterface-py3.4-v4.12-64.so']},
     include_package_data=True,
     classifiers=['Operating System :: Microsoft :: Windows',
                  'Programming Language :: Python',
