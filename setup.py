@@ -4,13 +4,12 @@ import os
 import sys
 import platform
 import errno
+import shutil
 
-version = '0.4.21'
+version = '0.4.22'
 
-def symlink_force(target, link_name):
+def force_symlink(target, link_name):
     try:
-        target = os.path.abspath(target)
-        link_name = os.path.abspath(link_name)
         print('creating sim link from ' + link_name + ' ->' + target )
         os.symlink(target, link_name)
     except OSError as e:
@@ -21,40 +20,85 @@ def symlink_force(target, link_name):
             print('could not create simlink ' + link_name + ' ->' + target )
             raise e
 
+def force_move(og_name, target):
+    try:
+        print('moveing file from ' + og_name + ' ->' + target )
+        shutil.move(og_name, target)
+    except OSError as e:
+        if e.errno == errno.EEXIST:
+            os.remove(target)
+            shutil.move(og_name, target)
+        else:
+            print('could not move file ' + og_name + ' ->' + target )
+            raise e
+
+def force_remove(target):
+    try:
+        print('removing file ' + target )
+        os.remove(target)
+    except OSError as e:
+        print('could not remove file ' + target )
+        raise e
+
+def get_datafileioLib_for_platform():
+           
+    py_major = sys.version_info[0]
+    py_minor = sys.version_info[1]
+
+    if py_major is not 3:
+        raise "this module is a python 3 module only"
+
+    print("seting up for " + platform.system() + " " + platform.architecture()[0] + " platform")
+    if py_minor is 7:
+        if platform.system() == 'Windows' and platform.architecture()[0] == '32bit':
+            return "_DataFileIOLibraryInterface-py3.7-v4.12-32.pyd"
+        elif platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
+            return "_DataFileIOLibraryInterface-py3.7-v4.12-64.pyd"
+        else:
+            raise "Platform or python version is not supported"
+    elif py_minor is 6:
+        if platform.system() == 'Windows' and platform.architecture()[0] == '32bit':
+            return "_DataFileIOLibraryInterface-py3.6-v4.12-32.pyd"
+        elif platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
+            return "_DataFileIOLibraryInterface-py3.6-v4.12-64.pyd"
+        elif platform.system() == 'Linux' and platform.architecture()[0] == '64bit':
+            return "_DataFileIOLibraryInterface-py3.6-v4.12-64.so"
+        else:
+            raise "Platform or python version is not supported"
+    elif py_minor is 4:
+        if platform.system() == 'Linux' and platform.architecture()[0] == '64bit':
+            return "_DataFileIOLibraryInterface-py3.4-v4.12-64.so"
+        else:
+            raise "Platform or python version is not supported"
+    else:
+        raise "python version is not supported"
+
 class PostInstallCommand(install):
     def run(self):
         install.run(self)
-        print("post install")
-        py_major = sys.version_info[0]
-        py_minor = sys.version_info[1]
+        print('starting post install')
+        datafile = get_datafileioLib_for_platform()
+        for script in self.get_outputs():
+            if os.path.basename(script).startswith("_DataFileIOLibraryInterface-"):
+                if (script.endswith(datafile)):
+                    if platform.system() == 'Windows':
+                        force_move(script, os.path.join(os.path.dirname(script), "_DataFileIOLibraryInterface.pyd"))
+                    else:
+                        force_move(script, os.path.join(os.path.dirname(script), "_DataFileIOLibraryInterface.so"))
+                else:
+                    force_remove(script) 
 
-        if py_major is not 3:
-            raise "this module is a python 3 module only"
 
-        print("seting up for " + platform.system() + " " + platform.architecture()[0] + " platform")
-        if py_minor is 7:
-            if platform.system() == 'Windows' and platform.architecture()[0] == '32bit':
-                symlink_force("./ICS_IPA/_DataFileIOLibraryInterface-py3.7-v4.12-32.pyd", "./ICS_IPA/_DataFileIOLibraryInterface.pyd")
-            elif platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
-                symlink_force("./ICS_IPA/_DataFileIOLibraryInterface-py3.7-v4.12-64.pyd", "./ICS_IPA/_DataFileIOLibraryInterface.pyd")
-            else:
-                raise "Platform or python version is not supported"
-        elif py_minor is 6:
-            if platform.system() == 'Windows' and platform.architecture()[0] == '32bit':
-                symlink_force("./ICS_IPA/_DataFileIOLibraryInterface-py3.6-v4.12-32.pyd", "./ICS_IPA/_DataFileIOLibraryInterface.pyd")
-            elif platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
-                symlink_force("./ICS_IPA/_DataFileIOLibraryInterface-py3.6-v4.12-64.pyd", "./ICS_IPA/_DataFileIOLibraryInterface.pyd")
-            elif platform.system() == 'Linux' and platform.architecture()[0] == '64bit':
-                symlink_force("./ICS_IPA/_DataFileIOLibraryInterface-py3.6-v4.12-64.so", "./ICS_IPA/_DataFileIOLibraryInterface.so")
-            else:
-                raise "Platform or python version is not supported"
-        elif py_minor is 4:
-            if platform.system() == 'Linux' and platform.architecture()[0] == '64bit':
-                symlink_force("./ICS_IPA/_DataFileIOLibraryInterface-py3.4-v4.12-64.so", "./ICS_IPA/_DataFileIOLibraryInterface.so")
-            else:
-                raise "Platform or python version is not supported"
+class PostDevelopCommand(install):
+    def run(self):
+        install.run(self)
+        print('starting post develop')
+        file = os.path.join("./ICS_IPA/", get_datafileioLib_for_platform())
+        if platform.system() == 'Windows':
+            force_symlink(file, "./ICS_IPA/_DataFileIOLibraryInterface.pyd")
         else:
-            raise "python version is not supported"
+            force_symlink(file, "./ICS_IPA/_DataFileIOLibraryInterface.so")
+
 
 setup(
     name='ICS_IPA',
@@ -91,6 +135,6 @@ setup(
                  'Programming Language :: Python :: 3.6'],
     cmdclass={
         'install': PostInstallCommand,
-        'develop': PostInstallCommand,
+        'develop': PostDevelopCommand,
     }
 )
