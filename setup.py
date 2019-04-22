@@ -5,18 +5,20 @@ import sys
 import platform
 import errno
 
-version = '0.4.19'
+version = '0.4.20'
 
 def symlink_force(target, link_name):
     try:
         target = os.path.abspath(target)
         link_name = os.path.abspath(link_name)
+        print('creating sim link from ' + link_name + ' ->' + target )
         os.symlink(target, link_name)
     except OSError as e:
         if e.errno == errno.EEXIST:
             os.remove(link_name)
             os.symlink(target, link_name)
         else:
+            print('could not create simlink ' + link_name + ' ->' + target )
             raise e
 
 class PostInstallCommand(install):
