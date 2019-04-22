@@ -6,39 +6,43 @@ import platform
 import errno
 import shutil
 
-version = '0.4.22'
+version = '0.4.23'
+
 
 def force_symlink(target, link_name):
     try:
-        print('creating sim link from ' + link_name + ' ->' + target )
+        print('creating sim link from ' + link_name + ' ->' + target)
         os.symlink(target, link_name)
     except OSError as e:
         if e.errno == errno.EEXIST:
             os.remove(link_name)
             os.symlink(target, link_name)
         else:
-            print('could not create simlink ' + link_name + ' ->' + target )
+            print('could not create simlink ' + link_name + ' ->' + target)
             raise e
+
 
 def force_move(og_name, target):
     try:
-        print('moveing file from ' + og_name + ' ->' + target )
+        print('moveing file from ' + og_name + ' ->' + target)
         shutil.move(og_name, target)
     except OSError as e:
         if e.errno == errno.EEXIST:
             os.remove(target)
             shutil.move(og_name, target)
         else:
-            print('could not move file ' + og_name + ' ->' + target )
+            print('could not move file ' + og_name + ' ->' + target)
             raise e
+
 
 def force_remove(target):
     try:
-        print('removing file ' + target )
+        print('removing file ' + target)
         os.remove(target)
     except OSError as e:
-        print('could not remove file ' + target )
+        print('could not remove file ' + target)
         raise e
+
 
 def get_datafileioLib_for_platform():
            
@@ -72,6 +76,7 @@ def get_datafileioLib_for_platform():
             raise "Platform or python version is not supported"
     else:
         raise "python version is not supported"
+
 
 class PostInstallCommand(install):
     def run(self):
@@ -123,12 +128,8 @@ setup(
                  version + '.tar.gz',
     package=['DataFileIOLibrary'],
     package_data={'DataFileIOLibrary':
-                  ['ICS_IPA/_DataFileIOLibraryInterface-py3.6-v4.12-32.pyd',
-                   'ICS_IPA/_DataFileIOLibraryInterface-py3.6-v4.12-64.pyd',
-                   'ICS_IPA/_DataFileIOLibraryInterface-py3.6-v4.12-64.so',
-                   'ICS_IPA/_DataFileIOLibraryInterface-py3.7-v4.12-32.pyd',
-                   'ICS_IPA/_DataFileIOLibraryInterface-py3.7-v4.12-64.pyd',
-                   'ICS_IPA/_DataFileIOLibraryInterface-py3.4-v4.12-64.so']},
+                  ['ICS_IPA/_DataFileIOLibraryInterface.pyd',
+                   'ICS_IPA/_DataFileIOLibraryInterface.so']},
     include_package_data=True,
     classifiers=['Operating System :: Microsoft :: Windows',
                  'Programming Language :: Python',
