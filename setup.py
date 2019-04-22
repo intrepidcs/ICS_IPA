@@ -5,7 +5,7 @@ import sys
 import platform
 import errno
 
-version = '0.4.18'
+version = '0.4.19'
 
 def symlink_force(target, link_name):
     try:
@@ -19,9 +19,8 @@ def symlink_force(target, link_name):
         else:
             raise e
 
-class CustomInstall(install):
-    def run (self):
-        install.run(self)
+class PostInstallCommand(install):
+    def run(self):
 
         print("post install")
         py_major = sys.version_info[0]
@@ -54,6 +53,8 @@ class CustomInstall(install):
                 raise "Platform or python version is not supported"
         else:
             raise "python version is not supported"
+        
+        install.run(self)
 
 setup(
     name='ICS_IPA',
@@ -89,6 +90,7 @@ setup(
                  'Programming Language :: Python',
                  'Programming Language :: Python :: 3.6'],
     cmdclass={
-        'install': CustomInstall,
+        'install': PostInstallCommand,
+        'develop': PostInstallCommand,
     }
 )
