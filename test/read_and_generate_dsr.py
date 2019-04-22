@@ -144,9 +144,7 @@ for dbFilePath in dbFilePaths:
 
 
 class AdvancedDataCheck:
-
-
-''' uses a class witch the starting point of the file is used as max trigger '''
+    ''' uses a class witch the starting point of the file is used as max trigger '''
 
     def __init__(self, data):
         self.AccelPedalPositionIndex = data.indexOfSignal("AccelPedalPosition")
