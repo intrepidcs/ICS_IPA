@@ -6,7 +6,7 @@ import platform
 import errno
 import shutil
 
-version = '0.4.23'
+version = '0.4.24'
 
 
 def force_symlink(target, link_name):
@@ -126,14 +126,12 @@ setup(
     url='https://github.com/intrepidcs/ICS_IPA',
     download_url='https://github.com/intrepidcs/ICS_IPA/archive/' +
                  version + '.tar.gz',
-    package=['DataFileIOLibrary'],
-    package_data={'DataFileIOLibrary':
-                  ['ICS_IPA/_DataFileIOLibraryInterface.pyd',
-                   'ICS_IPA/_DataFileIOLibraryInterface.so']},
+    package_data={'ICS_IPA':
+                  ['_DataFileIOLibraryInterface.[pyd|so]']},
     include_package_data=True,
-    classifiers=['Operating System :: Microsoft :: Windows',
-                 'Programming Language :: Python',
-                 'Programming Language :: Python :: 3.6'],
+    #classifiers=['Operating System :: Microsoft :: Windows',
+    #             'Programming Language :: Python',
+    #             'Programming Language :: Python :: 3.6'],
     cmdclass={
         'install': PostInstallCommand,
         'develop': PostDevelopCommand,
