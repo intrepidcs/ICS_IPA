@@ -6,7 +6,7 @@ import platform
 import errno
 import shutil
 
-version = '0.4.25'
+version = '0.4.26'
 
 
 def force_symlink(target, link_name):
