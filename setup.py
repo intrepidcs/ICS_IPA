@@ -6,7 +6,7 @@ import platform
 import errno
 import shutil
 
-version = '0.4.24'
+version = '0.4.25'
 
 
 def force_symlink(target, link_name):
@@ -66,12 +66,12 @@ def get_datafileioLib_for_platform():
         elif platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
             return "_DataFileIOLibraryInterface-py3.6-v4.12-64.pyd"
         elif platform.system() == 'Linux' and platform.architecture()[0] == '64bit':
-            return "_DataFileIOLibraryInterface-py3.6-v4.12-64.so"
+            return "_DataFileIOLibraryInterface-py3.6-v4.25-64.so"
         else:
             raise "Platform or python version is not supported"
     elif py_minor is 4:
         if platform.system() == 'Linux' and platform.architecture()[0] == '64bit':
-            return "_DataFileIOLibraryInterface-py3.4-v4.12-64.so"
+            return "_DataFileIOLibraryInterface-py3.4-v4.25-64.so"
         else:
             raise "Platform or python version is not supported"
     else:
