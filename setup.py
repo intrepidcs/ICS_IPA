@@ -1,4 +1,5 @@
 from setuptools import setup
+from setuptools.command.develop import develop
 from setuptools.command.install import install
 import os
 import sys
@@ -6,7 +7,8 @@ import platform
 import errno
 import shutil
 
-version = '0.4.26'
+version = '0.4.27'
+dllversion = '0.4.26'
 
 
 def force_symlink(target, link_name):
@@ -15,8 +17,11 @@ def force_symlink(target, link_name):
         os.symlink(target, link_name)
     except OSError as e:
         if e.errno == errno.EEXIST:
-            os.remove(link_name)
-            os.symlink(target, link_name)
+            try:
+                os.remove(link_name)
+                os.symlink(target, link_name)
+            except OSError as e:
+                print('deleted could not create simlink ' + link_name + ' ->' + target)
         else:
             print('could not create simlink ' + link_name + ' ->' + target)
             raise e
@@ -45,7 +50,7 @@ def force_remove(target):
 
 
 def get_datafileioLib_for_platform():
-           
+    global dllversion
     py_major = sys.version_info[0]
     py_minor = sys.version_info[1]
 
@@ -55,23 +60,30 @@ def get_datafileioLib_for_platform():
     print("seting up for " + platform.system() + " " + platform.architecture()[0] + " platform")
     if py_minor is 7:
         if platform.system() == 'Windows' and platform.architecture()[0] == '32bit':
-            return "_DataFileIOLibraryInterface-py3.7-v4.12-32.pyd"
+            return "_DataFileIOLibraryInterface-py3.7-v" + dllversion + "-32.pyd"
         elif platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
-            return "_DataFileIOLibraryInterface-py3.7-v4.12-64.pyd"
+            return "_DataFileIOLibraryInterface-py3.7-v" + dllversion + "-64.pyd"
+        elif platform.system() == 'Linux' and platform.architecture()[0] == '64bit':
+            return "_DataFileIOLibraryInterface-py3.7-v" + dllversion + "-64.so"
         else:
             raise "Platform or python version is not supported"
     elif py_minor is 6:
         if platform.system() == 'Windows' and platform.architecture()[0] == '32bit':
-            return "_DataFileIOLibraryInterface-py3.6-v4.12-32.pyd"
+            return "_DataFileIOLibraryInterface-py3.6-v" + dllversion + "-32.pyd"
         elif platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
-            return "_DataFileIOLibraryInterface-py3.6-v4.12-64.pyd"
+            return "_DataFileIOLibraryInterface-py3.6-v" + dllversion + "-64.pyd"
         elif platform.system() == 'Linux' and platform.architecture()[0] == '64bit':
-            return "_DataFileIOLibraryInterface-py3.6-v4.25-64.so"
+            return "_DataFileIOLibraryInterface-py3.6-v" + dllversion + "-64.so"
+        else:
+            raise "Platform or python version is not supported"
+    elif py_minor is 5:
+        if platform.system() == 'Linux' and platform.architecture()[0] == '64bit':
+            return "_DataFileIOLibraryInterface-py3.5-v" + dllversion + "-64.so"
         else:
             raise "Platform or python version is not supported"
     elif py_minor is 4:
         if platform.system() == 'Linux' and platform.architecture()[0] == '64bit':
-            return "_DataFileIOLibraryInterface-py3.4-v4.25-64.so"
+            return "_DataFileIOLibraryInterface-py3.4-v" + dllversion + "-64.so"
         else:
             raise "Platform or python version is not supported"
     else:
@@ -94,15 +106,15 @@ class PostInstallCommand(install):
                     force_remove(script) 
 
 
-class PostDevelopCommand(install):
+class PostDevelopCommand(develop):
     def run(self):
-        install.run(self)
+        develop.run(self)
         print('starting post develop')
-        file = os.path.join("./ICS_IPA/", get_datafileioLib_for_platform())
-        if platform.system() == 'Windows':
-            force_symlink(file, "./ICS_IPA/_DataFileIOLibraryInterface.pyd")
-        else:
-            force_symlink(file, "./ICS_IPA/_DataFileIOLibraryInterface.so")
+        file = os.path.join(os.getcwd(), "ICS_IPA", get_datafileioLib_for_platform())
+        #if platform.system() == 'Windows':
+        #    force_symlink(file, os.path.join(os.getcwd(), "ICS_IPA", "_DataFileIOLibraryInterface.pyd"))
+        #else:
+        #    force_symlink(file, os.path.join(os.getcwd(), "ICS_IPA", "_DataFileIOLibraryInterface.so"))
 
 
 setup(

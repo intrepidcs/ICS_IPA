@@ -10,11 +10,11 @@ from ICS_IPA import DataFileIOLibrary as icsFI
 from ICS_IPA import DSRTools as icsDSR
 from ICS_IPA import IPAInterfaceLibrary
 
-slFilePath = "./examples/findInFiles/ConfigForSampleDataFileDemo.asl"
+slFilePath = os.path.join(os.getcwd(), "examples", "findInFiles", "ConfigForSampleDataFileDemo.asl")
 dbFilePaths = [
-    {"path": "./examples/Data/SampleDataFiles/DataSpySampleDataFileAllSignals1.db"}]
+    {"path": os.path.join(os.getcwd(), "examples", "Data", "SampleDataFiles", "DataSpySampleDataFileAllSignals1.db")}]
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
 handler = logging.FileHandler('IPA.log')
 handler.setLevel(logging.INFO)
