@@ -1,3 +1,6 @@
 
 include ICS_IPA/_DataFileIOLibraryInterface-*.pyd
 include ICS_IPA/_DataFileIOLibraryInterface-*.so
+include ICS_IPA/DataFileIO-*.dll
+include ICS_IPA/DataFileIO-*.dll
+include ICS_IPA/LibDataFileIO-*.so
