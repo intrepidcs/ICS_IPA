@@ -7,7 +7,7 @@ import platform
 import errno
 import shutil
 
-version = '0.4.27'
+version = '0.4.28'
 dllversion = '0.4.26'
 
 
@@ -139,7 +139,7 @@ setup(
     download_url='https://github.com/intrepidcs/ICS_IPA/archive/' +
                  version + '.tar.gz',
     package_data={'ICS_IPA':
-                  ['_DataFileIOLibraryInterface.[pyd|so]']},
+                  ['_DataFileIOLibraryInterface*.[pyd|so]']},
     include_package_data=True,
     #classifiers=['Operating System :: Microsoft :: Windows',
     #             'Programming Language :: Python',
