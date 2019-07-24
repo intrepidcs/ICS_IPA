@@ -21,7 +21,7 @@ class DSRFile:
 		self.data = data
 		if IPAInterfaceLibrary.is_running_on_wivi_server():
 			filenamewithoutpath = os.path.basename(data.dbFile["path"])
-			self.dsr["HitList"].append({"id": data.dbFile["id"], "startDate": data.dbFile["startDate"], "vehicle": data.dbFile["vehicle"], "Filename": filenamewithoutpath})	
+			self.dsr["HitList"].append({"id": data.dbFile["id"], "startDate": data.dbFile["startDate"], "vehicle": data.dbFile["vehicle"], "FilenameAndPath": filenamewithoutpath})	
 		else:
 			self.dsr["HitList"].append({"FilenameAndPath": data.dbFile["path"]})
 		self.data_to_hitlist[data] = self.dsr["HitList"][-1]

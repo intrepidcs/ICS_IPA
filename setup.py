@@ -7,7 +7,7 @@ import platform
 import errno
 import shutil
 
-version = '0.4.50'
+version = '0.4.51'
 dllversion = '0.4.26'
 
 

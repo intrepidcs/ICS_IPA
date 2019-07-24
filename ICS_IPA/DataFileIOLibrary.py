@@ -40,6 +40,7 @@ class ICSDataFile:
 		try :
 			t0 = time.time()
 
+			self.IsOpen = True
 			self.UsingTempDBFile = False
 			self.UsingTempSLFile = False
 			self.AutoCleanUpTempFiles = AutoCleanUpTempFiles
@@ -74,17 +75,7 @@ class ICSDataFile:
 			raise e
 
 	def __del__(self):
-		try:
-			CloseDataFile(self.points)
-		except:
-			pass
-		if self.UsingTempDBFile and self.AutoCleanUpTempFiles and os.path.isfile(self.dbFileName):
-			os.remove(self.dbFileName)
-			self.dbFileName = ''
-		if self.UsingTempSLFile and self.AutoCleanUpTempFiles and os.path.isfile(self.slFilePath):
-			os.remove(self.slFilePath)
-			self.slFilePath = ''
-
+		self.close()
 
 	def __getitem__(self, key: TypeVar('A', str, bytes)):
 		''' this method of retrieving data is slower then simply asking for the timestamp and points array'''
@@ -100,6 +91,12 @@ class ICSDataFile:
 		return self
 
 	def __exit__(self, exc_type, exc_value, traceback):
+		self.close()
+
+	def close(self):
+		if not self.IsOpen:
+			return
+		self.IsOpen = False
 		try:
 			CloseDataFile(self.points)
 		except:
