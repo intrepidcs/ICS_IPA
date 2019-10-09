@@ -121,7 +121,7 @@ setup(
     name='ICS_IPA',
     packages=['ICS_IPA'],
     version=version,
-    description='API used for DataMining mdf data files using DataSpy',
+    description=platform.architecture()[0] + ' API used for DataMining mdf data files using DataSpy',
     long_description='This repo is designed to manage the library functions used \
                       for DataMining through mdf data files using the DataSpy \
                       product made by Intrepid Control System. The library \
