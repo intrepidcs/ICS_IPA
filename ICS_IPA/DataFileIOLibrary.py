@@ -75,7 +75,7 @@ class ICSDataFile:
 			raise e
 
 	def __del__(self):
-		self.close()
+		self.__close()
 
 	def __getitem__(self, key: TypeVar('A', str, bytes)):
 		''' this method of retrieving data is slower then simply asking for the timestamp and points array'''
@@ -91,9 +91,9 @@ class ICSDataFile:
 		return self
 
 	def __exit__(self, exc_type, exc_value, traceback):
-		self.close()
+		self.__close()
 
-	def close(self):
+	def __close(self):
 		if not self.IsOpen:
 			return
 		self.IsOpen = False
