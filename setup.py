@@ -160,7 +160,7 @@ setup(
     install_requires=['numpy'],
     extra_require={
         'examples': ["matplotlib", "nltk", "xlsxwriter", "openpyxl"]
-    }
+    },
     include_package_data=True,
     cmdclass={
         'install': PostInstallCommand,
