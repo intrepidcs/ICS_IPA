@@ -7,9 +7,8 @@ import platform
 import errno
 import shutil
 
-version = '0.4.52'
+version = '0.4.53'
 dllversion = '0.4.27'
-
 
 def force_symlink(target, link_name):
     try:
@@ -57,8 +56,26 @@ def get_datafileioLib_for_platform():
     if py_major is not 3:
         raise "this module is a python 3 module only"
 
-    print("seting up for " + platform.system() + " " + platform.architecture()[0] + " platform")
-    if py_minor is 7:
+    print("setting up for " + platform.system() + " " + platform.architecture()[0] + " platform")
+    if py_minor is 9:
+        if platform.system() == 'Windows' and platform.architecture()[0] == '32bit':
+            return "_DataFileIOLibraryInterface-py3.9-v" + dllversion + "-32.pyd"
+        elif platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
+            return "_DataFileIOLibraryInterface-py3.9-v" + dllversion + "-64.pyd"
+        elif platform.system() == 'Linux' and platform.architecture()[0] == '64bit':
+            return "_DataFileIOLibraryInterface-py3.9-v" + dllversion + "-64.so"
+        else:
+            raise "Platform or python version is not supported"
+    elif py_minor is 8:
+        if platform.system() == 'Windows' and platform.architecture()[0] == '32bit':
+            return "_DataFileIOLibraryInterface-py3.8-v" + dllversion + "-32.pyd"
+        elif platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
+            return "_DataFileIOLibraryInterface-py3.8-v" + dllversion + "-64.pyd"
+        elif platform.system() == 'Linux' and platform.architecture()[0] == '64bit':
+            return "_DataFileIOLibraryInterface-py3.8-v" + dllversion + "-64.so"
+        else:
+            raise "Platform or python version is not supported"
+    elif py_minor is 7:
         if platform.system() == 'Windows' and platform.architecture()[0] == '32bit':
             return "_DataFileIOLibraryInterface-py3.7-v" + dllversion + "-32.pyd"
         elif platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
@@ -97,7 +114,7 @@ class PostInstallCommand(install):
         datafile = get_datafileioLib_for_platform()
         for script in self.get_outputs():
             if os.path.basename(script).startswith("_DataFileIOLibraryInterface-"):
-                if (script.endswith(datafile)):
+                if script.endswith(datafile):
                     if platform.system() == 'Windows':
                         force_move(script, os.path.join(os.path.dirname(script), "_DataFileIOLibraryInterface.pyd"))
                     else:
@@ -133,17 +150,18 @@ setup(
                       develop scripts on their PC and then run those scripts \
                       on the Wireless Neo VI data server without requiring \
                       the data to be downloaded.',
-    maintainer='Zaid Nackasha',
-    maintainer_email='ZNackasha@intrepidcs.com',
+    maintainer='Jeffrey Quesnelle',
+    maintainer_email='jeffq@intrepidcs.com',
     url='https://github.com/intrepidcs/ICS_IPA',
     download_url='https://github.com/intrepidcs/ICS_IPA/archive/' +
                  version + '.tar.gz',
     package_data={'ICS_IPA':
                   ['_DataFileIOLibraryInterface*.[pyd|so]']},
+    install_requires=['numpy'],
+    extra_require={
+        'examples': ["matplotlib", "nltk", "xlsxwriter", "openpyxl"]
+    }
     include_package_data=True,
-    #classifiers=['Operating System :: Microsoft :: Windows',
-    #             'Programming Language :: Python',
-    #             'Programming Language :: Python :: 3.6'],
     cmdclass={
         'install': PostInstallCommand,
         'develop': PostDevelopCommand,
