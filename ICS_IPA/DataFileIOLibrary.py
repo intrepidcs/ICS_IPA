@@ -9,15 +9,21 @@ import logging
 import time
 
 from ICS_IPA.DataFileIOLibraryInterface import *
+from ICS_IPA import IPAInterfaceLibrary
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-
 # create a logging format
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 # create a file handler
-fh = logging.FileHandler('IPA.log')
+loggingPath = "IPA.log"
+
+if IPAInterfaceLibrary.is_running_on_wivi_server():
+	ipaInstanceConfig = json.load(open(sys.argv[1]))
+	loggingPath = ipaInstanceConfig["output_dir"] + "IPA.log"
+
+fh = logging.FileHandler(loggingPath)
 fh.setLevel(logging.INFO)
 fh.setFormatter(formatter)
 
@@ -39,7 +45,7 @@ class ICSDataFile:
 		'''	
 		try :
 			t0 = time.time()
-
+			self.slFilePath = slFilePath
 			self.IsOpen = True
 			self.UsingTempDBFile = False
 			self.UsingTempSLFile = False
@@ -54,10 +60,9 @@ class ICSDataFile:
 			self.dbFile = dbFile
 
 			logger.info("Start Reading " + os.path.basename(dbFile["path"]))
-			if os.path.splitext(slFilePath)[1] == '.asl':
-				self.slFilePath = self.__ResolveAliaces(dbFile["path"], slFilePath)
+			if isinstance(slFilePath, str) and os.path.splitext(slFilePath)[1] == '.asl' or IPAInterfaceLibrary.is_running_on_wivi_server():
+				self.slFilePath = self.__ResolveAliases(dbFile["path"], slFilePath)
 				logger.debug("Aliaces Resolved")
-
 
 			self.dbFileName = self.__GetDBFilePath(dbFile["path"], self.slFilePath)
 			logger.debug("DB Created")
@@ -143,7 +148,7 @@ class ICSDataFile:
 			self.nameToIndex = { channel["name"]: index for index, channel in enumerate(data["Channels"])}
 			self.indexToName = { index: channel["name"] for index, channel in enumerate(data["Channels"])}
 
-	def __ResolveAliaces(self, dbFilePath: str, aslFilePath: str):
+	def __ResolveAliases(self, dbFilePath: str, aslFilePath: str, outpath = None):
 		'''
 		@param dbFilePath is the database file that you would like to open
 		@parama slFilePath is the presumed JSON file with aliases
@@ -152,11 +157,16 @@ class ICSDataFile:
 				if file is invalid or does not contain aliases returns 
 				aslFilePath 
 		'''
-		path, filename = os.path.split(aslFilePath)
-		filename, extension = os.path.splitext(filename)
-		newfilename = '%s%s' % (filename,  ".sl")
-		newpath = os.path.join(path, newfilename)
-		self.numChannels = ValidateSignals(dbFilePath, aslFilePath, newpath)
+		newpath = outpath
+		if newpath is None:
+			path, filename = os.path.split(aslFilePath)
+			filename, extension = os.path.splitext(filename)
+			newfilename = '%s%s' % (filename,  ".sl")
+			newpath = os.path.join(path, newfilename)
+			self.numChannels = ValidateSignals(dbFilePath, aslFilePath, newpath)
+		else:
+			
+			self.numChannels = ValidateSignals(dbFilePath, str(aslFilePath), newpath)
 
 		if self.numChannels <= 0:
 			newpath = aslFilePath
@@ -327,5 +337,4 @@ if __name__ == "__main__":
 # This file is compatible with both classic and new-style classes.
 
 # This file is compatible with both classic and new-style classes.
-
 
