@@ -1,17 +1,25 @@
 #pragma once
 
-#if defined(PYD) && defined(_WIN32)
-#define EXPORT_SPEC __declspec(dllexport)
-#elif defined(_WINDLL)
-#define EXPORT_SPEC __declspec(dllexport) __stdcall
+#ifdef _WIN32
+#	if defined(_WINDLL)
+#		define EXPORT_SPEC __declspec(dllexport) __stdcall
+#	else
+#	    define EXPORT_SPEC __declspec(dllimport) __stdcall
+#	endif
 #else
-#define EXPORT_SPEC 
+#	define EXPORT_SPEC
+#endif
+
+#if !defined(SWIG) && defined(_WIN32)
+# define DECLAREWIDE
 #endif
 
 typedef double * DATA_PTR;
 
+#ifdef __cplusplus
 extern "C" 
 {
+#endif
 /** @brief Returns the number of channels read from the
  *  JSON file.
  *
@@ -19,7 +27,9 @@ extern "C"
  *  @return The number of channels read
  */
 int EXPORT_SPEC GetNumChannels(const char *pJsonFile);
-
+#ifdef DECLAREWIDE
+int EXPORT_SPEC GetNumChannelsW(const wchar_t *pJsonFile);
+#endif
 /** @brief Opens a data file, reads the potential channel names to process
  *  from the JSON file and writes out a JSON containing the exact 
  *  channels found.  This list can then be used in the OpenDataFile call.
@@ -44,7 +54,9 @@ int EXPORT_SPEC GetNumChannels(const char *pJsonFile);
  *          -3 if the JSON file is invalid
  */
 int EXPORT_SPEC ValidateSignals(const char *pDataFile, const char *pPrioritizedSignalJsonFile, const char *pValidSignalJsonFile);
-
+#ifdef DECLAREWIDE
+int EXPORT_SPEC ValidateSignalsW(const wchar_t *pDbFile, const wchar_t *pPrioritizedSignalJsonFile, const wchar_t *pValidSignalJsonFile);
+#endif
 /** @brief Opens a DB file, reads the channels to process
  *  from the JSON file, allocates memory for the channel
  *  values and timestamps and returns the start of measurement
@@ -72,7 +84,9 @@ int EXPORT_SPEC ValidateSignals(const char *pDataFile, const char *pPrioritizedS
  *          -3 if the JSON file is invalid
  */
 double EXPORT_SPEC OpenDataFile(const char *pDbFile, const char *pJsonFile, double ** datapointer, double ** timestamps, int * n);
-
+#ifdef DECLAREWIDE
+double EXPORT_SPEC OpenDataFileW(const wchar_t *pFile, const wchar_t *pJsonFile, double ** datapointer, double ** timestamps, int * n);
+#endif
 /** @brief Allows the user to use only a subset of the channels to
  *  determine the next time value.
  *  
@@ -207,7 +221,9 @@ int EXPORT_SPEC CloseDataFile(double * indatapointer, int n);
  *  @return 1 for success, 0 for error, -1 for licensing issues
  */
 int EXPORT_SPEC CreateDatabase(const char *pMdfFile, const char *pDbFile);
-
+#ifdef DECLAREWIDE
+int EXPORT_SPEC CreateDatabaseW(const wchar_t *pMdfFile, const wchar_t *pDbFile);
+#endif
 /** @brief Creates a DB file using the data found in the specified MDF file.
  *  Only the channels specified in the JSON file are written.
  *  
@@ -222,56 +238,36 @@ int EXPORT_SPEC CreateDatabase(const char *pMdfFile, const char *pDbFile);
  *  @return 1 for success, 0 for error, -1 for licensing issues
  */
 int EXPORT_SPEC CreateDatabaseForSignals(const char *pMdfFile, const char *pJsonFile, const char *pDbFile);
+#ifdef DECLAREWIDE
+int EXPORT_SPEC CreateDatabaseForSignalsW(const wchar_t *pMdfFile, const wchar_t *pJsonFile, const wchar_t *pDbFile);
+#endif
 
 /** @brief Creates a JSON file containing the channels found in the 
- *  specified MDF file.  MDF 3.x and 4.x files are supported seamlessly.
- *  
- *  If an error ocurred, the return value is 0.
+ *  specified MDF/DB file.  DB, MDF 3.x and 4.x files are supported seamlessly.
  *
  *  @param pMdfFile    The full path to the MDF file to read
  *  @param pJsonFile   The full path to the JSON file to write
- *  @return 1 for success, 0 for error, -1 for licensing issues
+ *  @return number of channels written for success, -2 for invalid datafile, 
+ *  -3 for error writing output file
  */
-int EXPORT_SPEC GetChannels(const char *pMdfFile, const char *pJsonFile);
+int EXPORT_SPEC GetChannels(const char *pDataFile, const char *pJsonFile);
+#ifdef DECLAREWIDE
+int EXPORT_SPEC GetChannelsW(const wchar_t *pDataFile, const wchar_t *pJsonFile);
+#endif
 
 /** @brief Creates a JSON file containing the various statistics (min/max/avg, etc)
- *  computed on the channels found in the specified MDF file.  MDF 3.x and 4.x files 
- *  are supported seamlessly.
- *  
- *  If an error ocurred, the return value is 0.
+ *  computed on the channels found in the specified MDF/DB file.  DB, MDF 3.x and 4.x 
+ *  files are supported seamlessly.
  *
  *  @param pMdfFile    The full path to the MDF file to read
  *  @param pJsonFile   The full path to the JSON file to write
- *  @return 1 for success, 0 for error, -1 for licensing issues
+ *  @return number of channels written for success, -2 for invalid datafile, 
+ *  -3 for error writing output file
  */
-int EXPORT_SPEC GetChannelStatistics(const char *pMdfFile, const char *pJsonFile);
-
-/** @brief Creates an MDF file containing the selected channels found in the DB file specified.
- *  
- *  If the Data Spy license is invalid, this call returns -1
- *  
- *  If an error ocurred, the return value is 0.
- *
- *  @param pDbFile     The full path to the DB file to read
- *  @param pMdfFile    The full path to the MDF file to write
- *  @return 1 for success, 0 for error, -1 for licensing issues
- */
-int EXPORT_SPEC ExportToMdf(const char *pDbFile, const char *pMdfFile);
-
-/** @brief Creates an MDF file containing the selected channels found in the DB file specified
- *  using the force rate parameter specified.  Rates less than or equal to 0 will be treated
- *  as a regular data export.
- *  
- *  If the Data Spy license is invalid, this call returns -1
- *  
- *  If an error ocurred, the return value is 0.
- *
- *  @param pDbFile     The full path to the DB file to read
- *  @param pMdfFile    The full path to the MDF file to write
- *  @param dForceRate  The rate in seconds.  Use decimal values to specifies fractions.
- *  @return 1 for success, 0 for error, -1 for licensing issues
- */
-int EXPORT_SPEC ExportToMdfForceRate(const char *pDbFile, const char *pMdfFile, double dForceRate);
+int EXPORT_SPEC GetChannelStatistics(const char *pDataFile, const char *pJsonFile);
+#ifdef DECLAREWIDE
+int EXPORT_SPEC GetChannelStatisticsW(const wchar_t *pDataFile, const wchar_t *pJsonFile);
+#endif
 
 /** @brief Creates an MDF or DB file containing the data specified in the dsr file
  *  
@@ -283,20 +279,10 @@ int EXPORT_SPEC ExportToMdfForceRate(const char *pDbFile, const char *pMdfFile, 
  *  @return 0 for success, -1 for licensing issues, -3 is the DSR file is invalid
  */
 int EXPORT_SPEC OutputHitsToFile(const char *pScriptFile, const char *pOutFile);
-
-/** @brief The following functions take Unicode paths which are needed
- *  for various extended character versions of Windows.  They function the same
- *  the functions described above do.
- */
-
-int EXPORT_SPEC GetNumChannelsW(const wchar_t *pJsonFile);
-int EXPORT_SPEC ValidateSignalsW(const wchar_t *pDbFile, const wchar_t *pPrioritizedSignalJsonFile, const wchar_t *pValidSignalJsonFile);
-double EXPORT_SPEC OpenDataFileW(const wchar_t *pFile, const wchar_t *pJsonFile, double ** datapointer, double ** timestamps, int * n);
-int EXPORT_SPEC CreateDatabaseW(const wchar_t *pMdfFile, const wchar_t *pDbFile);
-int EXPORT_SPEC CreateDatabaseForSignalsW(const wchar_t *pMdfFile, const wchar_t *pJsonFile, const wchar_t *pDbFile);
-int EXPORT_SPEC GetChannelsW(const wchar_t *pMdfFile, const wchar_t *pJsonFile);
-int EXPORT_SPEC GetChannelStatisticsW(const wchar_t *pMdfFile, const wchar_t *pJsonFile);
-int EXPORT_SPEC ExportToMdfW(const wchar_t *pDbFile, const wchar_t *pMdfFile);
-int EXPORT_SPEC ExportToMdfForceRateW(const wchar_t *pDbFile, const wchar_t *pMdfFile, double dForceRate);
+#ifdef DECLAREWIDE
 int EXPORT_SPEC OutputHitsToFileW(const wchar_t *pScriptFile, const wchar_t *pOutFile);
+#endif
+
+#ifdef __cplusplus
 }
+#endif
