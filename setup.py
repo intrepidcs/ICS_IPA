@@ -7,8 +7,8 @@ import platform
 import errno
 import shutil
 
-version = '0.4.53'
-dllversion = '0.4.27'
+version = '1.0.54'
+dllversion = '1.0.54'
 
 def force_symlink(target, link_name):
     try:
@@ -150,8 +150,8 @@ setup(
                       develop scripts on their PC and then run those scripts \
                       on the Wireless Neo VI data server without requiring \
                       the data to be downloaded.',
-    maintainer='Jeffrey Quesnelle',
-    maintainer_email='jeffq@intrepidcs.com',
+    maintainer='John Mitchell',
+    maintainer_email='jmitchell@intrepidcs.com',
     url='https://github.com/intrepidcs/ICS_IPA',
     download_url='https://github.com/intrepidcs/ICS_IPA/archive/' +
                  version + '.tar.gz',
