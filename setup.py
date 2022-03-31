@@ -28,7 +28,7 @@ def force_symlink(target, link_name):
 
 def force_move(og_name, target):
     try:
-        print('moveing file from ' + og_name + ' ->' + target)
+        print('moving file from ' + og_name + ' ->' + target)
         shutil.move(og_name, target)
     except OSError as e:
         if e.errno == errno.EEXIST:
@@ -53,16 +53,16 @@ def get_datafileioLib_for_platform():
     py_major = sys.version_info[0]
     py_minor = sys.version_info[1]
 
-    if py_major is not 3:
+    if py_major != 3:
         raise "this module is a python 3 module only"
 
     print("setting up for " + platform.system() + " " + platform.architecture()[0] + " platform")
-    if py_minor is 10:
+    if py_minor == 10:
         if platform.system() == 'Linux' and platform.architecture()[0] == '64bit':
             return "_DataFileIOLibraryInterface-py3.10-v" + dllversion + "-64.so"
         else:
             raise "Platform or python version is not supported"    
-    elif py_minor is 9:
+    elif py_minor == 9:
         if platform.system() == 'Windows' and platform.architecture()[0] == '32bit':
             return "_DataFileIOLibraryInterface-py3.9-v" + dllversion + "-32.pyd"
         elif platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
@@ -71,7 +71,7 @@ def get_datafileioLib_for_platform():
             return "_DataFileIOLibraryInterface-py3.9-v" + dllversion + "-64.so"
         else:
             raise "Platform or python version is not supported"
-    elif py_minor is 8:
+    elif py_minor == 8:
         if platform.system() == 'Windows' and platform.architecture()[0] == '32bit':
             return "_DataFileIOLibraryInterface-py3.8-v" + dllversion + "-32.pyd"
         elif platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
@@ -80,14 +80,14 @@ def get_datafileioLib_for_platform():
             return "_DataFileIOLibraryInterface-py3.8-v" + dllversion + "-64.so"
         else:
             raise "Platform or python version is not supported"
-    elif py_minor is 7:
+    elif py_minor == 7:
         if platform.system() == 'Windows' and platform.architecture()[0] == '32bit':
             return "_DataFileIOLibraryInterface-py3.7-v" + dllversion + "-32.pyd"
         elif platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
             return "_DataFileIOLibraryInterface-py3.7-v" + dllversion + "-64.pyd"
         else:
             raise "Platform or python version is not supported"
-    elif py_minor is 6:
+    elif py_minor == 6:
         if platform.system() == 'Windows' and platform.architecture()[0] == '32bit':
             return "_DataFileIOLibraryInterface-py3.6-v" + dllversion + "-32.pyd"
         elif platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
