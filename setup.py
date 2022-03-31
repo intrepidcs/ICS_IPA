@@ -80,7 +80,7 @@ def get_datafileioLib_for_platform():
             return "_DataFileIOLibraryInterface-py3.8-v" + dllversion + "-64.so"
         else:
             raise "Platform or python version is not supported"
-	elif py_minor is 7:
+    elif py_minor is 7:
         if platform.system() == 'Windows' and platform.architecture()[0] == '32bit':
             return "_DataFileIOLibraryInterface-py3.7-v" + dllversion + "-32.pyd"
         elif platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
