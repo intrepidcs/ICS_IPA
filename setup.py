@@ -7,8 +7,8 @@ import platform
 import errno
 import shutil
 
-version = '1.0.54'
-dllversion = '1.0.54'
+version = '1.1.55'
+dllversion = '1.1.55'
 
 def force_symlink(target, link_name):
     try:
@@ -85,6 +85,8 @@ def get_datafileioLib_for_platform():
             return "_DataFileIOLibraryInterface-py3.7-v" + dllversion + "-32.pyd"
         elif platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
             return "_DataFileIOLibraryInterface-py3.7-v" + dllversion + "-64.pyd"
+        elif platform.system() == 'Linux' and platform.architecture()[0] == '64bit':
+            return "_DataFileIOLibraryInterface-py3.7-v" + dllversion + "-64.so"
         else:
             raise "Platform or python version is not supported"
     elif py_minor == 6:
@@ -146,6 +148,13 @@ setup(
     url='https://github.com/intrepidcs/ICS_IPA',
     download_url='https://github.com/intrepidcs/ICS_IPA/archive/' +
                  version + '.tar.gz',
+    classifiers = ['Operating System :: Microsoft :: Windows',
+                'Operating System :: POSIX :: Linux',
+                'Programming Language :: Python',
+                'Programming Language :: Python :: 3.7',
+                'Programming Language :: Python :: 3.8',
+                'Programming Language :: Python :: 3.9',
+    ],
     package_data={'ICS_IPA':
                   ['_DataFileIOLibraryInterface*.[pyd|so]']},
     install_requires=['numpy'],
