@@ -11,6 +11,8 @@ import time
 from ICS_IPA.DataFileIOLibraryInterface import *
 from ICS_IPA import IPAInterfaceLibrary
 
+is_wivi = IPAInterfaceLibrary.is_running_on_wivi_server()
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 # create a logging format
@@ -19,7 +21,7 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 # create a file handler
 loggingPath = "IPA.log"
 
-if IPAInterfaceLibrary.is_running_on_wivi_server():
+if is_wivi:
 	ipaInstanceConfig = json.load(open(sys.argv[1]))
 	loggingPath = ipaInstanceConfig["output_dir"] + "IPA.log"
 
@@ -60,8 +62,12 @@ class ICSDataFile:
 			self.dbFile = dbFile
 
 			logger.info("Start Reading " + os.path.basename(dbFile["path"]))
-			if isinstance(slFilePath, str) and os.path.splitext(slFilePath)[1] == '.asl' or IPAInterfaceLibrary.is_running_on_wivi_server():
-				self.slFilePath = self.__ResolveAliases(dbFile["path"], slFilePath)
+			if os.path.splitext(slFilePath)[1] == '.asl' or is_wivi:
+				self.slFilePath = self.__ResolveAliases(
+					dbFile["path"], 
+					slFilePath,
+					ipaInstanceConfig["output_dir"] + "config.sl" if is_wivi else None
+				)
 				logger.debug("Aliaces Resolved")
 
 			self.dbFileName = self.__GetDBFilePath(dbFile["path"], self.slFilePath)
@@ -166,7 +172,7 @@ class ICSDataFile:
 			self.numChannels = ValidateSignals(dbFilePath, aslFilePath, newpath)
 		else:
 			
-			self.numChannels = ValidateSignals(dbFilePath, str(aslFilePath), newpath)
+			self.numChannels = ValidateSignals(dbFilePath, aslFilePath, newpath)
 
 		if self.numChannels <= 0:
 			newpath = aslFilePath
