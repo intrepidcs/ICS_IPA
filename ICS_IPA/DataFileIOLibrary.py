@@ -11,21 +11,18 @@ import time
 from ICS_IPA.DataFileIOLibraryInterface import *
 from ICS_IPA import IPAInterfaceLibrary
 
-is_wivi = IPAInterfaceLibrary.is_running_on_wivi_server()
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 # create a logging format
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 # create a file handler
-loggingPath = "IPA.log"
+outputDir = os.getcwd()
 
-if is_wivi:
-	ipaInstanceConfig = json.load(open(sys.argv[1]))
-	loggingPath = ipaInstanceConfig["output_dir"] + "IPA.log"
+if IPAInterfaceLibrary.is_running_on_wivi_server() and os.path.splitext(sys.argv[1])[1].lower() == '.json':
+	outputDir = json.load(open(sys.argv[1]))["output_dir"]
 
-fh = logging.FileHandler(loggingPath)
+fh = logging.FileHandler(os.path.join(outputDir, "IPA.log"))
 fh.setLevel(logging.INFO)
 fh.setFormatter(formatter)
 
@@ -62,11 +59,11 @@ class ICSDataFile:
 			self.dbFile = dbFile
 
 			logger.info("Start Reading " + os.path.basename(dbFile["path"]))
-			if os.path.splitext(slFilePath)[1] == '.asl' or is_wivi:
+			if os.path.splitext(slFilePath)[1] == '.asl' or IPAInterfaceLibrary.is_running_on_wivi_server():
 				self.slFilePath = self.__ResolveAliases(
 					dbFile["path"], 
 					slFilePath,
-					ipaInstanceConfig["output_dir"] + "config.sl" if is_wivi else None
+					os.path.join(outputDir, "config.sl") if IPAInterfaceLibrary.is_running_on_wivi_server() else None
 				)
 				logger.debug("Aliaces Resolved")
 
