@@ -17,13 +17,12 @@ logger.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 # create a file handler
-loggingPath = "IPA.log"
+outputDir = os.getcwd()
 
-if IPAInterfaceLibrary.is_running_on_wivi_server():
-	ipaInstanceConfig = json.load(open(sys.argv[1]))
-	loggingPath = ipaInstanceConfig["output_dir"] + "IPA.log"
+if IPAInterfaceLibrary.is_running_on_wivi_server() and os.path.splitext(sys.argv[1])[1].lower() == '.json':
+	outputDir = json.load(open(sys.argv[1]))["output_dir"]
 
-fh = logging.FileHandler(loggingPath)
+fh = logging.FileHandler(os.path.join(outputDir, "IPA.log"))
 fh.setLevel(logging.INFO)
 fh.setFormatter(formatter)
 
@@ -60,8 +59,12 @@ class ICSDataFile:
 			self.dbFile = dbFile
 
 			logger.info("Start Reading " + os.path.basename(dbFile["path"]))
-			if isinstance(slFilePath, str) and os.path.splitext(slFilePath)[1] == '.asl' or IPAInterfaceLibrary.is_running_on_wivi_server():
-				self.slFilePath = self.__ResolveAliases(dbFile["path"], slFilePath)
+			if os.path.splitext(slFilePath)[1] == '.asl' or IPAInterfaceLibrary.is_running_on_wivi_server():
+				self.slFilePath = self.__ResolveAliases(
+					dbFile["path"], 
+					slFilePath,
+					os.path.join(outputDir, "config.sl") if IPAInterfaceLibrary.is_running_on_wivi_server() else None
+				)
 				logger.debug("Aliaces Resolved")
 
 			self.dbFileName = self.__GetDBFilePath(dbFile["path"], self.slFilePath)
@@ -166,7 +169,7 @@ class ICSDataFile:
 			self.numChannels = ValidateSignals(dbFilePath, aslFilePath, newpath)
 		else:
 			
-			self.numChannels = ValidateSignals(dbFilePath, str(aslFilePath), newpath)
+			self.numChannels = ValidateSignals(dbFilePath, aslFilePath, newpath)
 
 		if self.numChannels <= 0:
 			newpath = aslFilePath
