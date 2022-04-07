@@ -65,7 +65,7 @@ class ICSDataFile:
 					slFilePath,
 					os.path.join(outputDir, "config.sl") if IPAInterfaceLibrary.is_running_on_wivi_server() else None
 				)
-				logger.debug("Aliaces Resolved")
+				logger.debug("Aliases Resolved")
 
 			self.dbFileName = self.__GetDBFilePath(dbFile["path"], self.slFilePath)
 			logger.debug("DB Created")
