@@ -7,8 +7,8 @@ import platform
 import errno
 import shutil
 
-version = '1.1.56'
-dllversion = '1.1.56'
+version = '1.1.57'
+dllversion = '1.1.57'
 
 def force_symlink(target, link_name):
     try:
