@@ -7,8 +7,8 @@ import platform
 import errno
 import shutil
 
-version = '1.1.57'
-dllversion = '1.1.57'
+version = '1.1.59'
+dllversion = '1.1.59'
 
 def force_symlink(target, link_name):
     try:
@@ -57,8 +57,33 @@ def get_datafileioLib_for_platform():
         raise "this module is a python 3 module only"
 
     print("setting up for " + platform.system() + " " + platform.architecture()[0] + " platform")
-    if py_minor == 10:
-        if platform.system() == 'Linux' and platform.architecture()[0] == '64bit':
+    if py_minor == 13:
+        if platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
+            return "_DataFileIOLibraryInterface-py3.13-v" + dllversion + "-64.pyd"
+        elif platform.system() == 'Linux' and platform.architecture()[0] == '64bit':
+            return "_DataFileIOLibraryInterface-py3.13-v" + dllversion + "-64.so"
+        else:
+            raise "Platform or python version is not supported"    
+    elif py_minor == 12:
+        if platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
+            return "_DataFileIOLibraryInterface-py3.12-v" + dllversion + "-64.pyd"
+        elif platform.system() == 'Linux' and platform.architecture()[0] == '64bit':
+            return "_DataFileIOLibraryInterface-py3.12-v" + dllversion + "-64.so"
+        else:
+            raise "Platform or python version is not supported"    
+    elif py_minor == 11:
+        if platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
+            return "_DataFileIOLibraryInterface-py3.11-v" + dllversion + "-64.pyd"
+        elif platform.system() == 'Linux' and platform.architecture()[0] == '64bit':
+            return "_DataFileIOLibraryInterface-py3.11-v" + dllversion + "-64.so"
+        else:
+            raise "Platform or python version is not supported"    
+    elif py_minor == 10:
+        if platform.system() == 'Windows' and platform.architecture()[0] == '32bit':
+            return "_DataFileIOLibraryInterface-py3.10-v" + dllversion + "-32.pyd"
+        elif platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
+            return "_DataFileIOLibraryInterface-py3.10-v" + dllversion + "-64.pyd"
+        elif platform.system() == 'Linux' and platform.architecture()[0] == '64bit':
             return "_DataFileIOLibraryInterface-py3.10-v" + dllversion + "-64.so"
         else:
             raise "Platform or python version is not supported"    
@@ -85,8 +110,6 @@ def get_datafileioLib_for_platform():
             return "_DataFileIOLibraryInterface-py3.7-v" + dllversion + "-32.pyd"
         elif platform.system() == 'Windows' and platform.architecture()[0] == '64bit':
             return "_DataFileIOLibraryInterface-py3.7-v" + dllversion + "-64.pyd"
-        elif platform.system() == 'Linux' and platform.architecture()[0] == '64bit':
-            return "_DataFileIOLibraryInterface-py3.7-v" + dllversion + "-64.so"
         else:
             raise "Platform or python version is not supported"
     elif py_minor == 6:
@@ -151,9 +174,12 @@ setup(
     classifiers = ['Operating System :: Microsoft :: Windows',
                 'Operating System :: POSIX :: Linux',
                 'Programming Language :: Python',
-                'Programming Language :: Python :: 3.7',
                 'Programming Language :: Python :: 3.8',
                 'Programming Language :: Python :: 3.9',
+                'Programming Language :: Python :: 3.10',
+                'Programming Language :: Python :: 3.11',
+                'Programming Language :: Python :: 3.12',
+                'Programming Language :: Python :: 3.13',
     ],
     package_data={'ICS_IPA':
                   ['_DataFileIOLibraryInterface*.[pyd|so]']},
